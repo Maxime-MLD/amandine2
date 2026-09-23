@@ -1,0 +1,98 @@
+---
+interface Props {
+  id: string;
+  label: string;
+  count: number;
+  variant?: "care" | "photos";
+  labels: { previous: string; next: string; goTo: string; position: string; roleDescription: string };
+}
+const { id, label, count, labels, variant = "care" } = Astro.props;
+---
+
+<div class:list={["manual-carousel", variant]} data-manual-carousel data-position-label={labels.position}>
+  <div id={id} class="carousel-track focus-ring" data-carousel-track tabindex="0" role="group" aria-roledescription={labels.roleDescription} aria-label={label}>
+    <slot />
+  </div>
+  <div class="carousel-controls" data-carousel-controls hidden>
+    <button type="button" class="carousel-arrow focus-ring" data-carousel-prev aria-label={labels.previous} aria-controls={id}>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="size-4" aria-hidden="true"><path d="m14 6-6 6 6 6" /></svg>
+    </button>
+    <div class="carousel-dots">
+      {Array.from({ length: count }, (_, i) => (
+        <button type="button" class="carousel-dot focus-ring" data-carousel-dot={i} aria-label={`${labels.goTo} ${i + 1}`} aria-controls={id} aria-current={i === 0 ? "true" : undefined}><span></span></button>
+      ))}
+    </div>
+    <button type="button" class="carousel-arrow focus-ring" data-carousel-next aria-label={labels.next} aria-controls={id}>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="size-4" aria-hidden="true"><path d="m10 6 6 6-6 6" /></svg>
+    </button>
+  </div>
+  <span class="sr-only" data-carousel-status aria-live="polite" aria-atomic="true"></span>
+</div>
+
+<style>
+  .manual-carousel { position: relative; min-width: 0; height: 100%; }
+  .carousel-track { display: grid; grid-auto-flow: column; grid-auto-columns: 100%; height: 100%; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none; border-radius: inherit; }
+  .carousel-track::-webkit-scrollbar { display: none; }
+  .carousel-controls { position: absolute; z-index: 2; right: 0.625rem; bottom: 0.625rem; left: 0.625rem; display: flex; align-items: center; justify-content: space-between; gap: 0.125rem; }
+  .carousel-controls[hidden] { display: none; }
+  .carousel-arrow { display: inline-flex; width: 2.75rem; height: 2.75rem; flex-shrink: 0; align-items: center; justify-content: center; border: 0; border-radius: var(--radius-pill); cursor: pointer; background: var(--color-hero-badge); }
+  .carousel-dots { display: flex; min-width: 0; flex: 1; justify-content: center; }
+  .carousel-dot { display: flex; min-width: 0; width: 1.625rem; height: 2.75rem; align-items: center; justify-content: center; border: 0; cursor: pointer; }
+  .carousel-dot span { display: block; width: 0.3125rem; height: 0.3125rem; border-radius: var(--radius-pill); background: currentColor; opacity: 0.3; }
+  .carousel-dot[aria-current="true"] span { width: 0.875rem; opacity: 1; }
+  .photos .carousel-controls { color: var(--color-surface); }
+  .photos .carousel-arrow { background: var(--color-photo-shade); }
+  .photos .carousel-dot { width: 100%; }
+  .photos .carousel-dot span { width: 80%; height: 0.1875rem; }
+  .photos .focus-ring:focus-visible { outline-color: var(--color-surface); }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-manual-carousel]").forEach((root) => {
+    if (root.dataset.initialized) return;
+    const track = root.querySelector<HTMLElement>("[data-carousel-track]");
+    const previous = root.querySelector<HTMLButtonElement>("[data-carousel-prev]");
+    const next = root.querySelector<HTMLButtonElement>("[data-carousel-next]");
+    const controls = root.querySelector<HTMLElement>("[data-carousel-controls]");
+    const status = root.querySelector<HTMLElement>("[data-carousel-status]");
+    const dots = [...root.querySelectorAll<HTMLButtonElement>("[data-carousel-dot]")];
+    if (!track || !previous || !next || !controls || !status || !dots.length) return;
+    const slides = [...track.children].filter((slide): slide is HTMLElement => slide instanceof HTMLElement);
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let index = 0;
+    let requestedIndex = 0;
+
+    const update = () => {
+      index = Math.max(0, Math.min(slides.length - 1, Math.round(track.scrollLeft / track.clientWidth)));
+      requestedIndex = index;
+      dots.forEach((dot, i) => {
+        if (i === index) dot.setAttribute("aria-current", "true");
+        else dot.removeAttribute("aria-current");
+      });
+      slides.forEach((slide, i) => slide.setAttribute("aria-hidden", String(i !== index)));
+      status.textContent = `${root.dataset.positionLabel} ${index + 1} / ${slides.length} — ${slides[index]?.dataset.carouselLabel ?? ""}`;
+    };
+
+    const goTo = (target: number) => {
+      requestedIndex = (target + slides.length) % slides.length;
+      track.scrollTo({ left: track.clientWidth * requestedIndex, behavior: reducedMotion.matches ? "instant" : "smooth" });
+    };
+    previous.addEventListener("click", () => goTo(requestedIndex - 1));
+    next.addEventListener("click", () => goTo(requestedIndex + 1));
+    dots.forEach((dot, i) => dot.addEventListener("click", () => goTo(i)));
+    track.addEventListener("keydown", (event) => {
+      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      goTo(event.key === "Home" ? 0 : event.key === "End" ? slides.length - 1 : requestedIndex + (event.key === "ArrowRight" ? 1 : -1));
+    });
+    // Native scroll-snap supports touch; scrollend updates controls only after user navigation.
+    track.addEventListener("scrollend", update);
+    const resizeObserver = new ResizeObserver(() => {
+      track.scrollTo({ left: track.clientWidth * index, behavior: "instant" });
+    });
+    resizeObserver.observe(track);
+    controls.hidden = false;
+    root.dataset.initialized = "true";
+    update();
+  });
+</script>

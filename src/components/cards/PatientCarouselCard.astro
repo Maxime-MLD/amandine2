@@ -1,0 +1,25 @@
+---
+import { careOverview } from "../../data/careOverview";
+import ManualCarousel from "../ui/ManualCarousel.astro";
+import ResponsiveImage from "../ui/ResponsiveImage.astro";
+const { photos, carousel } = careOverview;
+---
+<article class="relative min-h-[23rem] min-w-0 overflow-hidden rounded-[var(--radius-lg)] bg-[var(--color-lilac-soft)]" aria-label={photos.label}>
+  <div class="absolute inset-0">
+    <ManualCarousel id="patient-carousel" label={photos.label} count={photos.items.length} labels={carousel.photos} variant="photos">
+      {photos.items.map((photo, index) => (
+        <figure class="patient-slide" role="group" aria-label={`${index + 1} / ${photos.items.length}`} data-carousel-label={photo.title}>
+          <ResponsiveImage src={photo.src} alt={photo.alt} widths={[320, 480, 640]} sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" formats={["webp"]} fallbackFormat="webp" quality={85} width={photo.src.width} height={photo.src.height} pictureClass="contents" class="absolute inset-0 h-full! w-full object-cover object-center" />
+          <figcaption class="patient-caption">
+            <p class="text-[1.625rem] leading-tight tracking-[-0.035em]">{photo.title}</p>
+            <p class="mt-1 text-[0.625rem]">{photos.illustration}</p>
+          </figcaption>
+        </figure>
+      ))}
+    </ManualCarousel>
+  </div>
+</article>
+<style>
+  .patient-slide { position: relative; min-width: 0; height: 100%; margin: 0; overflow: hidden; scroll-snap-align: start; scroll-snap-stop: always; }
+  .patient-caption { position: absolute; right: 0; bottom: 0; left: 0; padding: 4rem 1.375rem 4.25rem; background: var(--gradient-photo-caption); color: var(--color-surface); }
+</style>

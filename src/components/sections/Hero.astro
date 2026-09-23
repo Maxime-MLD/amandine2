@@ -1,52 +1,186 @@
 ---
-import { businessConfig } from "../../config/business.config";
-import Container from "../ui/Container.astro";
-import Section from "../ui/Section.astro";
+import { homeConfig } from "../../config/home.config";
+import { navigationConfig } from "../../config/navigation.config";
+import ResponsiveImage from "../ui/ResponsiveImage.astro";
 
-export interface Props {
-  eyebrow?: string;
-  title?: string;
-  description?: string;
-  fullHeight?: boolean;
-}
-
-const {
-  eyebrow = businessConfig.activity,
-  title = businessConfig.tradeName,
-  description = businessConfig.shortDescription,
-  fullHeight = false,
-} = Astro.props as Props;
-
-const hasMedia = Astro.slots.has("media");
+const { hero } = homeConfig;
+const { appointment } = navigationConfig;
 ---
 
-<Section id="hero" spacing="none" width="full" aria-labelledby="hero-title">
-  <Container>
-    <div
-      class:list={[
-        "grid min-w-0 gap-8 py-[var(--section-space-lg)] lg:gap-12",
-        hasMedia && "lg:grid-cols-2",
-        fullHeight && "min-h-[calc(100svh-4rem)] items-center",
-      ]}
-    >
-      <div class="safe-wrap max-w-3xl">
-        <p class="text-small font-semibold tracking-[0.08em] text-[var(--color-text-muted)] uppercase">
-          {eyebrow}
-        </p>
-        <h1 id="hero-title" class="mt-4">{title}</h1>
-        <p class="mt-6 max-w-2xl text-body-lg text-[var(--color-text-muted)]">
-          {description}
-        </p>
-      </div>
+<section id="hero" class="hero" aria-labelledby="hero-title">
+  <div class="hero-orbs" aria-hidden="true">
+    <span class="orb orb-top"></span>
+    <span class="orb orb-right"></span>
+    <span class="orb orb-bottom"></span>
+  </div>
 
-      {
-        hasMedia && (
-          <div class="min-w-0" data-hero-media>
-            <!-- TODO_HERO_MEDIA: ajouter le média client prévu pour cette section. -->
-            <slot name="media" />
-          </div>
-        )
-      }
-    </div>
-  </Container>
-</Section>
+  <div class="hero-copy relative z-10 min-w-0">
+    <p class="hero-badge inline-flex max-w-full items-center gap-2.5 rounded-[var(--radius-pill)] px-4 py-2.5 text-xs font-normal sm:px-5 sm:text-sm">
+      <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <circle cx="12" cy="12" r="8.5" />
+        <path d="M12 7v5l3 2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      {hero.badge}
+    </p>
+
+    <h1 id="hero-title" class="hero-heading mt-7 font-normal sm:mt-9">
+      {hero.titleLines.map((line) => <span class="block">{line}</span>)}
+    </h1>
+
+    <p class="hero-description mt-6 max-w-[25rem] text-sm leading-[1.6] text-[var(--color-text-secondary)] sm:mt-7 sm:text-[0.9375rem]">
+      {hero.description}
+    </p>
+
+    <a class="btn-primary focus-ring mt-7 min-h-[3.25rem] sm:mt-8" href={appointment.href} aria-label={appointment.ariaLabel}>
+      {appointment.label}
+    </a>
+
+    <p class="mt-5 flex items-center gap-2 text-xs text-[var(--color-text-secondary)] sm:mt-6">
+      <svg class="size-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z" />
+        <circle cx="12" cy="10" r="2.5" />
+      </svg>
+      {hero.location}
+    </p>
+  </div>
+
+  <div class="hero-portrait" data-hero-media>
+    <ResponsiveImage
+      src={hero.image.src}
+      alt={hero.image.alt}
+      priority
+      formats={["webp"]}
+      fallbackFormat="webp"
+      widths={[360, 540, 720, 960, 1086]}
+      sizes="(min-width: 1536px) 685px, (min-width: 1024px) 48vw, (min-width: 640px) 440px, 90vw"
+      width={hero.image.src.width}
+      height={hero.image.src.height}
+      quality={85}
+      class="w-full"
+    />
+  </div>
+</section>
+
+<style>
+  /* La composition et les cercles restent scoped ; toutes les couleurs sont des tokens. */
+  .hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: var(--gradient-hero);
+  }
+
+  .hero-copy {
+    padding: 2.5rem 1.25rem 0;
+  }
+
+  .hero-badge {
+    background: var(--color-hero-badge);
+  }
+
+  .hero-heading {
+    font-size: clamp(2.375rem, 6vw, 4.5rem);
+    line-height: 1.06;
+    letter-spacing: -0.047em;
+    text-wrap: initial;
+  }
+
+  .hero-portrait {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 27.5rem);
+    height: clamp(20rem, 105vw, 25rem);
+    margin: 2.5rem auto 0;
+  }
+
+  .hero-orbs {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .orb {
+    position: absolute;
+    display: block;
+    aspect-ratio: 1;
+    border: 1px solid var(--color-hero-orb-edge);
+    border-radius: 50%;
+    background: var(--color-hero-orb);
+  }
+
+  .orb-top {
+    width: 11rem;
+    top: 49%;
+    left: 28%;
+  }
+
+  .orb-right {
+    width: 16rem;
+    right: -9rem;
+    bottom: 6rem;
+  }
+
+  .orb-bottom {
+    width: 34rem;
+    right: -10rem;
+    bottom: -23rem;
+  }
+
+  @media (min-width: 40rem) {
+    .hero-copy {
+      padding: 3.5rem 3rem 0;
+    }
+
+    .hero-portrait {
+      height: 30rem;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .hero {
+      display: flex;
+      min-height: clamp(38rem, 49vw, 45rem);
+      align-items: center;
+    }
+
+    .hero-copy {
+      width: 59%;
+      padding: 4rem 0 4rem clamp(3rem, 4vw, 4.75rem);
+    }
+
+    .hero-heading {
+      font-size: clamp(3rem, 4.35vw, 4.375rem);
+    }
+
+    .hero-portrait {
+      position: absolute;
+      top: 12%;
+      right: 1.5%;
+      bottom: 0;
+      width: 48%;
+      height: auto;
+      margin: 0;
+    }
+
+    .orb-top {
+      width: 14rem;
+      top: 7%;
+      left: 58%;
+    }
+
+    .orb-right {
+      width: 15rem;
+      right: -4rem;
+      bottom: 12%;
+    }
+
+    .orb-bottom {
+      width: 45rem;
+      right: -7rem;
+      bottom: -32rem;
+    }
+  }
+</style>

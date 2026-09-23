@@ -1,0 +1,85 @@
+---
+import { homeConfig } from "../../config/home.config";
+
+const { message } = homeConfig.editorial;
+const words = message.split(/\s+/);
+---
+
+<section id="a-votre-ecoute" class="editorial" aria-labelledby="editorial-message" data-editorial>
+  <div class="editorial-panel" data-editorial-panel>
+    <h2 id="editorial-message" class="editorial-message" aria-label={message}>
+      <span aria-hidden="true">
+        {words.map((word, index) => (
+          <Fragment>
+            <span class="editorial-word" data-editorial-word data-motion>{word}</span>{index < words.length - 1 ? " " : ""}
+          </Fragment>
+        ))}
+      </span>
+    </h2>
+  </div>
+</section>
+
+<style>
+  .editorial { position: relative; }
+  .editorial-panel {
+    display: flex;
+    min-height: 100svh;
+    align-items: center;
+    padding: clamp(3rem, 8vh, 7rem) clamp(1.25rem, 4vw, 4.75rem);
+  }
+  .editorial-message {
+    width: 100%;
+    max-width: 78rem;
+    margin-inline: auto;
+    color: var(--color-text);
+    font-family: var(--font-primary);
+    font-size: var(--font-size-editorial);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.045em;
+    text-wrap: pretty;
+  }
+  .editorial-word { display: inline-block; }
+
+  /* Le texte reste lisible sans JS. L'espace de scroll n'existe qu'après initialisation. */
+  @media (prefers-reduced-motion: no-preference) {
+    .editorial[data-editorial-ready] { min-height: calc(100svh + var(--editorial-scroll-space)); }
+    .editorial[data-editorial-ready] .editorial-panel { position: sticky; top: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce), (forced-colors: active) {
+    .editorial-word { opacity: 1 !important; }
+  }
+</style>
+
+<script>
+  import { animationConfig } from "../../config/animation.config";
+  import { initMotion } from "../../scripts/motion";
+
+  document.querySelectorAll<HTMLElement>("[data-editorial]").forEach((section) => {
+    initMotion(`editorial-${section.id}`, ({ gsap, select }) => {
+      const words = select<HTMLElement>("[data-editorial-word]");
+      const panel = section.querySelector<HTMLElement>("[data-editorial-panel]");
+      if (!panel || !words.length) return;
+
+      section.setAttribute("data-editorial-ready", "");
+      // Les opacités inline sont écrites uniquement par GSAP pour la progression liée au scroll.
+      gsap.set(words, { opacity: animationConfig.editorial.mutedOpacity });
+      gsap.to(words, {
+        opacity: 1,
+        duration: animationConfig.editorial.wordDuration,
+        stagger: animationConfig.editorial.wordStagger,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: () => `+=${Math.max(1, section.offsetHeight - panel.offsetHeight)}`,
+          scrub: true,
+          invalidateOnRefresh: true,
+        },
+      });
+
+      return () => section.removeAttribute("data-editorial-ready");
+    }, { scope: section });
+  });
+</script>

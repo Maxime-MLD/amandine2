@@ -1,24 +1,24 @@
 import type { BusinessConfig } from "../types/business.config";
 
 export const businessConfig = {
-  tradeName: "TODO_BUSINESS_NAME",
-  legalName: "TODO_LEGAL_NAME",
+  tradeName: "Amandine Gauthier",
+  legalName: "Amandine Gauthier",
   owner: {
-    firstName: "TODO_OWNER_FIRST_NAME",
-    lastName: "TODO_OWNER_LAST_NAME",
+    firstName: "Amandine",
+    lastName: "Gauthier",
   },
-  activity: "TODO_BUSINESS_ACTIVITY",
-  shortDescription: "TODO_BUSINESS_SHORT_DESCRIPTION",
+  activity: "Infirmière diplômée d’État",
+  shortDescription: "Soins infirmiers à domicile à Montagny et dans un rayon de 10 km. Soins au cabinet uniquement sur rendez-vous. Disponible 24h/24, 7j/7.",
   contact: {
-    phoneDisplay: "TODO_PHONE_DISPLAY",
-    phoneNormalized: "TODO_PHONE_NORMALIZED",
-    email: "TODO_EMAIL",
+    phoneDisplay: "06 77 53 58 79",
+    phoneNormalized: "+33677535879",
+    email: "contact@amandine-gauthier.fr",
   },
   address: {
-    formatted: "TODO_FULL_ADDRESS",
-    street: "TODO_STREET",
-    postalCode: "TODO_POSTAL_CODE",
-    city: "TODO_CITY",
+    formatted: "39, rue de la République, 42840 Montagny",
+    street: "39, rue de la République",
+    postalCode: "42840",
+    city: "Montagny",
     region: "TODO_REGION",
     country: "TODO_COUNTRY",
     countryCode: "TODO_COUNTRY_CODE",
@@ -26,9 +26,9 @@ export const businessConfig = {
     longitude: "TODO_LONGITUDE",
   },
   serviceArea: {
-    primaryArea: "TODO_PRIMARY_SERVICE_AREA",
+    primaryArea: "Montagny",
     radius: {
-      value: "TODO_SERVICE_RADIUS",
+      value: 10,
       unit: "km",
     },
     servedCities: ["TODO_SERVED_CITY_1", "TODO_SERVED_CITY_2"],
@@ -73,5 +73,5 @@ export const businessConfig = {
     phone: "TODO_HOSTING_PROVIDER_PHONE",
     website: "TODO_HOSTING_PROVIDER_URL",
   },
-  googleMapsUrl: "TODO_GOOGLE_MAPS_URL",
+  googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=39%20rue%20de%20la%20R%C3%A9publique%2042840%20Montagny",
 } as const satisfies BusinessConfig;

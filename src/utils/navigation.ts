@@ -15,7 +15,10 @@ export function isNavigationItemActive(
     return false;
   }
 
-  const targetPathname = new URL(href, "https://starter.invalid").pathname;
+  const target = new URL(href, "https://starter.invalid");
+  // Une ancre de section n'est pas une page active supplémentaire.
+  if (target.hash) return false;
+  const targetPathname = target.pathname;
 
   return normalizePathname(currentPathname) === normalizePathname(targetPathname);
 }

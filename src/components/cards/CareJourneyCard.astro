@@ -1,0 +1,63 @@
+---
+import type { CareJourneyStep } from "../../data/careJourney";
+
+interface Props { step: CareJourneyStep }
+const { step } = Astro.props;
+---
+
+<article class:list={["journey-card", `journey-card--${step.tone}`]}>
+  <div class="journey-card-heading flex items-start gap-3">
+    <span class="journey-number shrink-0" aria-hidden="true">{step.number}</span>
+    <h3 class="font-normal">{step.title}</h3>
+  </div>
+  <p class="journey-description mt-5 text-sm leading-relaxed">{step.description}</p>
+  <p class="journey-detail mt-auto pt-6 text-xs">{step.detail}</p>
+</article>
+
+<style>
+  .journey-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 15rem;
+    height: 100%;
+    overflow: hidden;
+    padding: clamp(1.25rem, 2.3vw, 2rem);
+    border-radius: var(--radius-lg);
+    color: var(--color-text);
+  }
+  .journey-card::after {
+    content: "";
+    position: absolute;
+    width: 15rem;
+    aspect-ratio: 1;
+    right: -6rem;
+    bottom: -9rem;
+    border: 1px solid var(--color-hero-orb-edge);
+    border-radius: var(--radius-pill);
+    background: var(--color-hero-orb);
+    pointer-events: none;
+  }
+  .journey-card--lilac { background: var(--gradient-journey-contact); }
+  .journey-card--lilac::after { top: -9rem; bottom: auto; }
+  .journey-card--peach { background: var(--gradient-journey-appointment); }
+  .journey-card--rose { background: var(--gradient-journey-care); }
+  .journey-card--rose::after { left: -6rem; right: auto; }
+  .journey-number {
+    display: grid;
+    width: 1.75rem;
+    height: 1.75rem;
+    place-items: center;
+    border: 1px solid var(--color-hero-orb-edge);
+    border-radius: var(--radius-pill);
+    font-size: 0.6875rem;
+  }
+  h3 {
+    max-width: 10ch;
+    font-size: clamp(1.375rem, 2.2vw, 2rem);
+    line-height: 1.07;
+    letter-spacing: -0.035em;
+  }
+  .journey-description { max-width: 29ch; }
+  .journey-detail { position: relative; z-index: 1; }
+</style>

@@ -1,6 +1,6 @@
 @layer base {
   body {
-    font-family: var(--font-body);
+    font-family: var(--font-primary);
     font-size: var(--font-size-body);
     line-height: var(--line-height-body);
   }
@@ -10,9 +10,10 @@
   }
 
   :where(h1, h2, h3, h4, h5, h6) {
-    font-family: var(--font-display);
-    font-weight: 600;
+    font-family: var(--font-primary);
+    font-weight: 400;
     letter-spacing: var(--tracking-heading);
+    overflow-wrap: anywhere;
     text-wrap: balance;
   }
 
@@ -23,7 +24,7 @@
 
   h2 {
     font-size: var(--font-size-h2);
-    line-height: 1.1;
+    line-height: 1;
   }
 
   h3 {
@@ -32,16 +33,48 @@
   }
 
   p {
+    font-weight: 400;
+    text-wrap: pretty;
+  }
+}
+
+@layer components {
+  .hero-title {
+    max-inline-size: 100%;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-hero);
+    font-weight: 400;
+    line-height: 0.96;
+    letter-spacing: -0.045em;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+  }
+
+  .section-title {
+    max-inline-size: 100%;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-section);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+  }
+
+  .lead {
+    font-size: var(--font-size-lead);
+    font-weight: 400;
+    line-height: 1.45;
     text-wrap: pretty;
   }
 }
 
 @utility font-display {
-  font-family: var(--font-display);
+  font-family: var(--font-primary);
 }
 
 @utility font-body {
-  font-family: var(--font-body);
+  font-family: var(--font-primary);
 }
 
 @utility text-h1 {

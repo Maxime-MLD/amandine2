@@ -1,0 +1,49 @@
+---
+import { careOverview } from "../../data/careOverview";
+import CareIcon from "../ui/CareIcon.astro";
+import ManualCarousel from "../ui/ManualCarousel.astro";
+const { care, carousel } = careOverview;
+---
+<article class="care-card relative isolate min-h-[23rem] min-w-0 overflow-hidden rounded-[var(--radius-lg)]">
+  <div class="bubbles" aria-hidden="true">{Array.from({ length: 18 }, () => <span></span>)}</div>
+  <div class="relative z-10 pt-8 text-center">
+    <p class="text-[0.6875rem] text-[var(--color-care-icon)]">{care.subtitle}</p>
+    <h2 class="mt-2 text-[1.875rem] leading-tight font-normal tracking-[-0.04em]">{care.title}</h2>
+  </div>
+  <div class="relative z-10 h-[16.5rem]">
+    <ManualCarousel id="care-carousel" label={care.title} count={care.items.length} labels={carousel.care}>
+      {care.items.map((item, index) => (
+        <div class="care-slide" role="group" aria-label={`${index + 1} / ${care.items.length}`} data-carousel-label={item.label}>
+          <div class="icon-disc"><CareIcon name={item.icon} class="size-12" /></div>
+          <h3 class="mt-5 max-w-[12rem] text-center text-[1rem] leading-tight font-normal tracking-[-0.02em]">{item.label}</h3>
+        </div>
+      ))}
+    </ManualCarousel>
+  </div>
+</article>
+
+<style>
+  .care-card { background: var(--gradient-care); }
+  .care-slide { display: flex; min-width: 0; align-items: center; flex-direction: column; padding: 1.5rem 1rem 4rem; scroll-snap-align: start; scroll-snap-stop: always; }
+  .icon-disc { display: flex; width: 6.5rem; height: 6.5rem; flex-shrink: 0; align-items: center; justify-content: center; border-radius: var(--radius-pill); background: var(--color-surface); color: var(--color-care-icon); }
+  .bubbles { position: absolute; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; }
+  .bubbles span { position: absolute; width: 0.55rem; aspect-ratio: 1; border-radius: 50%; border: 1px solid var(--color-care-bubble-edge); background: var(--color-care-bubble); }
+  .bubbles span:nth-child(1) { top: 5%; left: 12%; width: 1.25rem; }
+  .bubbles span:nth-child(2) { top: 18%; left: 6%; }
+  .bubbles span:nth-child(3) { top: 4%; left: 57%; width: 0.35rem; }
+  .bubbles span:nth-child(4) { top: 10%; right: 12%; width: 0.8rem; }
+  .bubbles span:nth-child(5) { top: 27%; right: 3%; width: 1.5rem; }
+  .bubbles span:nth-child(6) { top: 41%; left: 10%; width: 0.9rem; }
+  .bubbles span:nth-child(7) { top: 55%; left: 2%; width: 0.4rem; }
+  .bubbles span:nth-child(8) { top: 46%; right: 16%; width: 0.4rem; }
+  .bubbles span:nth-child(9) { top: 63%; right: 6%; width: 1.1rem; }
+  .bubbles span:nth-child(10) { top: 74%; left: 18%; width: 1.5rem; }
+  .bubbles span:nth-child(11) { bottom: 5%; left: 7%; }
+  .bubbles span:nth-child(12) { bottom: 14%; right: 18%; width: 0.4rem; }
+  .bubbles span:nth-child(13) { bottom: 2%; right: 28%; width: 1rem; }
+  .bubbles span:nth-child(14) { top: 32%; left: 27%; width: 0.35rem; }
+  .bubbles span:nth-child(15) { top: 67%; left: 42%; width: 0.35rem; }
+  .bubbles span:nth-child(16) { bottom: 2%; left: 38%; width: 0.4rem; }
+  .bubbles span:nth-child(17) { top: 5%; right: -2%; width: 1.8rem; }
+  .bubbles span:nth-child(18) { top: 85%; right: -1%; width: 0.75rem; }
+</style>

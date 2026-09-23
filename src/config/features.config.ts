@@ -23,7 +23,7 @@ export const featuresConfig = {
   faq: false,
   localArea: false,
   practicalInfo: false,
-  animations: false,
+  animations: true,
   heavyAnimations: false,
   smoothScroll: true,
   externalSmoothScroll: false,

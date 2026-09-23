@@ -14,7 +14,7 @@ const dialogTitleId = `${dialogId}-title`;
 const navigationItems: readonly NavigationItem[] = navigationConfig.items;
 ---
 
-<div data-mobile-menu>
+<div class="lg:hidden" data-mobile-menu>
   <button
     type="button"
     class="focus-ring tap-target inline-flex items-center justify-center rounded-[var(--radius-md)] lg:hidden"
@@ -39,16 +39,16 @@ const navigationItems: readonly NavigationItem[] = navigationConfig.items;
 
   <dialog
     id={dialogId}
-    class="m-0 ml-auto h-dvh max-h-dvh w-[min(90vw,24rem)] max-w-none border-0 border-l border-[var(--color-border)] bg-[var(--color-surface)] p-0 text-[var(--color-text)] backdrop:bg-[var(--color-overlay)]"
+    class="m-0 ml-auto h-dvh max-h-dvh w-[min(90vw,24rem)] max-w-none border-0 bg-[var(--color-surface)] p-0 text-[var(--color-text)] backdrop:bg-[var(--color-overlay)]"
     aria-labelledby={dialogTitleId}
     data-mobile-menu-dialog
   >
     <div class="flex min-h-full flex-col">
-      <div class="flex min-h-16 items-center justify-between gap-4 border-b border-[var(--color-border)] px-[var(--page-padding-mobile)]">
+      <div class="flex min-h-20 items-center justify-between gap-4 px-[var(--page-padding)]">
         <a
           href="/"
           id={dialogTitleId}
-          class="safe-wrap font-display font-semibold no-underline"
+          class="safe-wrap font-display font-medium tracking-[-0.035em] no-underline"
         >
           {businessConfig.tradeName}
         </a>
@@ -82,7 +82,7 @@ const navigationItems: readonly NavigationItem[] = navigationConfig.items;
               <li>
                 <a
                   href={item.href}
-                  class="focus-ring safe-wrap block rounded-[var(--radius-sm)] px-3 py-3 font-semibold no-underline aria-[current=page]:bg-[var(--color-primary)] aria-[current=page]:text-[var(--color-on-primary)]"
+                  class="focus-ring safe-wrap block rounded-[var(--radius-sm)] px-3 py-3 font-normal no-underline aria-[current=page]:bg-[var(--color-lilac-soft)]"
                   aria-label={item.ariaLabel}
                   aria-current={
                     isNavigationItemActive(currentPathname, item.href, item.external)
@@ -119,6 +119,16 @@ const navigationItems: readonly NavigationItem[] = navigationConfig.items;
           }
         </ul>
       </nav>
+      <div class="px-[var(--page-padding)] pb-8">
+        <a
+          href={navigationConfig.appointment.href}
+          class="btn-primary focus-ring w-full"
+          aria-label={navigationConfig.appointment.ariaLabel}
+          data-mobile-menu-link
+        >
+          {navigationConfig.appointment.label}
+        </a>
+      </div>
     </div>
   </dialog>
 </div>

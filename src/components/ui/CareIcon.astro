@@ -1,0 +1,17 @@
+---
+import type { CareIconName } from "../../data/careOverview";
+
+interface Props { name: CareIconName; class?: string }
+const { name, class: className } = Astro.props;
+const paths: Record<CareIconName, string[]> = {
+  bandage: ["m4 11 7-7a4.2 4.2 0 0 1 6 0l3 3a4.2 4.2 0 0 1 0 6l-7 7a4.2 4.2 0 0 1-6 0l-3-3a4.2 4.2 0 0 1 0-6Z", "m8 7 9 9M7 8l9 9M9.5 12h.01M12 9.5h.01M12 14.5h.01M14.5 12h.01"],
+  syringe: ["m15 3 6 6m-3-3-4 4m-7 0 7 7m-5-9 7 7-7 7-7-7 7-7Z", "m5 19-3 3m7-10 2 2m-5 1 2 2"],
+  tube: ["m13 2 9 9m-8-8L3 14a4.25 4.25 0 0 0 6 6L20 9", "m8 9 7 7M5 13l6 6m1-12 2 2m1-5 2 2"],
+  infusion: ["M9 4V2h6v2M7 4h10v12a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V4Z", "M12 18v3a1 1 0 0 0 2 0m-4-13h4m-4 3h4m-2-5v7"],
+  drop: ["M12 2S5 10 5 15a7 7 0 0 0 14 0c0-5-7-13-7-13Z", "M8 15h2l1-3 2 6 1-3h2"],
+  treatment: ["m4 12 8-8a5.65 5.65 0 0 1 8 8l-8 8a5.65 5.65 0 0 1-8-8Z", "m8 8 8 8"],
+};
+---
+<svg class={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  {paths[name].map((d) => <path d={d} />)}
+</svg>

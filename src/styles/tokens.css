@@ -1,56 +1,124 @@
 :root {
   color-scheme: light;
 
-  /* TODO_BRAND_PRIMARY: remplacer par la couleur principale du client. */
-  --color-primary: #171717;
-  /* TODO_BRAND_SECONDARY: remplacer par la couleur secondaire du client. */
-  --color-secondary: #525252;
-  /* TODO_BRAND_ACCENT: remplacer par la couleur d'accent du client. */
-  --color-accent: #737373;
-  --color-on-primary: #ffffff;
-  --color-on-secondary: #ffffff;
-  --color-background: #fafafa;
+  /* Colors */
+  --color-page: #f1f1f1;
+  --color-frame: #f9f9f9;
   --color-surface: #ffffff;
-  --color-text: #171717;
-  --color-text-muted: #666666;
-  --color-border: #dedede;
-  --color-border-strong: #737373;
-  --color-overlay: rgb(0 0 0 / 0.4);
+  --color-text: #161b21;
+  --color-text-secondary: #73777c;
+  --color-text-light: #b9b9b9;
+  --color-dark: #131b24;
+  --color-dark-hover: #202a35;
+  --color-blue-soft: #e8efff;
+  --color-lilac-soft: #efedf8;
+  --color-pink-soft: #f6ded9;
+  --color-peach-soft: #f7d7cf;
+  --color-border: rgb(20 25 30 / 0.06);
+  --color-hero-badge: rgb(255 255 255 / 0.5);
+  --color-hero-orb: rgb(255 255 255 / 0.15);
+  --color-hero-orb-edge: rgb(255 255 255 / 0.35);
+  --color-care-pink: #f4b9cf;
+  --color-journey-lilac: #dcd9ff;
+  --color-journey-orange: #ffc58e;
+  --color-journey-coral: #f8b1a4;
+  --color-journey-rose: #ee9fc4;
+  --color-care-orange: #ffe0b5;
+  --color-care-icon: #a65170;
+  --color-care-bubble: rgb(255 255 255 / 0.26);
+  --color-care-bubble-edge: rgb(255 255 255 / 0.52);
+  --color-photo-shade: rgb(19 27 36 / 0.65);
+  --color-photo-clear: rgb(19 27 36 / 0);
+  --gradient-care: linear-gradient(115deg, var(--color-care-orange), var(--color-pink-soft) 45%, var(--color-care-pink));
+  --gradient-journey-contact: linear-gradient(135deg, var(--color-blue-soft), var(--color-journey-lilac));
+  --gradient-journey-appointment: linear-gradient(160deg, var(--color-blue-soft), var(--color-journey-lilac) 22%, var(--color-peach-soft) 78%, var(--color-care-orange));
+  --gradient-journey-care: linear-gradient(120deg, var(--color-journey-orange) 5%, var(--color-journey-coral) 48%, var(--color-journey-rose) 100%);
+  --gradient-contact: radial-gradient(ellipse at 0% 0%, var(--color-pink-soft), transparent 57%), radial-gradient(ellipse at 100% 100%, var(--color-blue-soft), var(--color-lilac-soft) 12%, transparent 55%);
+  --gradient-photo-caption: linear-gradient(0deg, var(--color-photo-shade), var(--color-photo-clear));
 
-  --container-max: 90rem;
-  --page-padding-desktop: clamp(2.5rem, 4vw, 4rem);
-  --page-padding-tablet: 2rem;
-  --page-padding-mobile: clamp(1rem, 4vw, 1.25rem);
+  /* Gradients */
+  --gradient-hero: linear-gradient(
+    174deg,
+    var(--color-blue-soft) 0%,
+    var(--color-lilac-soft) 38%,
+    var(--color-pink-soft) 72%,
+    var(--color-peach-soft) 100%
+  );
+  --gradient-primary: linear-gradient(
+    160deg,
+    var(--color-blue-soft) 0%,
+    #efedf7 48%,
+    #f7d8d0 100%
+  );
+  --gradient-secondary: linear-gradient(
+    135deg,
+    #edf1ff 0%,
+    #f8ddd7 100%
+  );
 
-  --section-space-xl: clamp(6rem, 10vw, 10rem);
-  --section-space-lg: clamp(4.5rem, 8vw, 7.5rem);
-  --section-space-md: clamp(3.5rem, 6vw, 5.5rem);
-  --section-space-sm: clamp(2.5rem, 4vw, 4rem);
-
-  --radius-sm: 0.375rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1.25rem;
-  --radius-xl: 2rem;
+  /* Radii */
+  --radius-sm: 1.125rem;
+  --radius-md: 1.5rem;
+  --radius-lg: 2rem;
+  --radius-xl: 2.5rem;
   --radius-pill: 9999px;
 
-  /* TODO_FONT_DISPLAY: remplacer par la police display du client. */
-  --font-display: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  /* TODO_FONT_BODY: remplacer par la police de texte du client. */
-  --font-body: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* Layout */
+  --container: 90rem;
+  --page-padding: clamp(1rem, 2.2vw, 2rem);
+  --section-space: clamp(6rem, 10vw, 11.25rem);
 
-  --font-size-h1: clamp(2.5rem, 1.6rem + 4.5vw, 6rem);
-  --font-size-h2: clamp(2rem, 1.45rem + 2.75vw, 4rem);
-  --font-size-h3: clamp(1.375rem, 1.15rem + 1.125vw, 2.25rem);
-  --font-size-body-lg: clamp(1.125rem, 1.075rem + 0.25vw, 1.25rem);
+  /* Typography */
+  --font-primary: "Satoshi", "General Sans", "Inter", Arial, sans-serif;
+  --font-size-hero: clamp(3.25rem, 6vw, 6rem);
+  --font-size-editorial: clamp(1.875rem, 4.9vw, 4.5rem);
+  --editorial-scroll-space: 80svh;
+  --journey-scroll-space: 240svh;
+  --font-size-section: clamp(2.625rem, 5vw, 4.75rem);
+  --font-size-h3: clamp(1.5rem, 1.2rem + 1vw, 2.25rem);
+  --font-size-lead: clamp(1.125rem, 1.5vw, 1.375rem);
   --font-size-body: clamp(1rem, 0.975rem + 0.125vw, 1.0625rem);
   --font-size-small: clamp(0.8125rem, 0.7875rem + 0.125vw, 0.875rem);
+  --line-height-body: 1.6;
+  --tracking-heading: -0.04em;
 
-  --line-height-heading: 1.05;
-  --line-height-body: 1.65;
-  --tracking-heading: -0.035em;
-
+  /* Motion */
   --duration-fast: 150ms;
   --duration-normal: 300ms;
   --duration-slow: 600ms;
   --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Starter compatibility aliases — remove as components adopt the new tokens. */
+  --color-primary: var(--color-dark);
+  --color-secondary: var(--color-text-secondary);
+  --color-accent: var(--color-dark-hover);
+  --color-on-primary: var(--color-surface);
+  --color-on-secondary: var(--color-surface);
+  --color-background: var(--color-page);
+  --color-text-muted: var(--color-text-secondary);
+  --color-border-strong: rgb(20 25 30 / 0.2);
+  --color-overlay: rgb(19 27 36 / 0.42);
+  --container-max: var(--container);
+  --page-padding-desktop: var(--page-padding);
+  --page-padding-tablet: var(--page-padding);
+  --page-padding-mobile: var(--page-padding);
+  --section-space-xl: var(--section-space);
+  --section-space-lg: clamp(5rem, 8vw, 9rem);
+  --section-space-md: clamp(4rem, 6vw, 7rem);
+  --section-space-sm: clamp(2.5rem, 4vw, 4rem);
+  --font-display: var(--font-primary);
+  --font-body: var(--font-primary);
+  --font-size-h1: var(--font-size-hero);
+  --font-size-h2: var(--font-size-section);
+  --font-size-body-lg: var(--font-size-lead);
+  --line-height-heading: 1;
+}
+
+@media (width < 48rem) {
+  :root {
+    --radius-sm: 1rem;
+    --radius-md: 1.25rem;
+    --radius-lg: 1.625rem;
+    --radius-xl: 2rem;
+  }
 }

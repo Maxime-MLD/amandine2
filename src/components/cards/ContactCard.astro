@@ -1,0 +1,12 @@
+---
+import { careOverview } from "../../data/careOverview";
+const { contact } = careOverview;
+---
+<article class="contact-card flex min-h-[23rem] min-w-0 flex-col items-start justify-center rounded-[var(--radius-lg)] p-7 lg:p-6 xl:p-8">
+  <h2 class="max-w-[12rem] text-[1.875rem] leading-[1.05] font-normal tracking-[-0.04em]">{contact.title}</h2>
+  <p class="mt-5 max-w-[15rem] text-sm leading-[1.5] text-[var(--color-text-secondary)]">{contact.text}</p>
+  <a href={contact.href} class="btn-primary focus-ring mt-7 min-h-12 px-6" aria-label={contact.ariaLabel}>{contact.label}</a>
+</article>
+<style>
+  .contact-card { background-color: var(--color-surface); background-image: var(--gradient-contact); }
+</style>

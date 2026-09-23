@@ -1,0 +1,13 @@
+---
+import { careOverview } from "../../data/careOverview";
+import LocationCard from "../cards/LocationCard.astro";
+import CareCarouselCard from "../cards/CareCarouselCard.astro";
+import ContactCard from "../cards/ContactCard.astro";
+import PatientCarouselCard from "../cards/PatientCarouselCard.astro";
+---
+<section id="apercu-soins" class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4" aria-label={careOverview.label}>
+  <LocationCard />
+  <CareCarouselCard />
+  <ContactCard />
+  <PatientCarouselCard />
+</section>
