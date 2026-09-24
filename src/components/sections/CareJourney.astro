@@ -22,7 +22,7 @@ import CareJourneyCard from "../cards/CareJourneyCard.astro";
       ))}
     </ol>
 
-    <div class="journey-action relative z-10 text-center">
+    <div class="journey-action relative z-10 text-center" data-journey-action data-motion>
       <a href={careJourney.contact.href} aria-label={careJourney.contact.ariaLabel} class="btn-primary focus-ring">
         {careJourney.contact.label}
         <span aria-hidden="true">↗</span>
@@ -69,7 +69,7 @@ import CareJourneyCard from "../cards/CareJourneyCard.astro";
   /* Sans JS, mouvement réduit ou écran peu haut : les trois étapes restent en lecture normale. */
   @media (prefers-reduced-motion: no-preference) and (min-height: 800px) and (min-width: 375px) {
     .care-journey[data-journey-ready] { height: calc(100svh + var(--journey-scroll-space)); }
-    [data-journey-ready] .journey-panel {
+    :is([data-journey-ready], [data-journey-complete]) .journey-panel {
       position: sticky;
       top: 1rem;
       height: calc(100svh - 2rem);
@@ -77,19 +77,27 @@ import CareJourneyCard from "../cards/CareJourneyCard.astro";
       overflow: clip;
       gap: 1.5rem;
     }
-    [data-journey-ready] .journey-stage { position: relative; flex: 1; min-height: 0; max-width: 28rem; display: block; }
-    [data-journey-ready] .journey-step { position: absolute; width: 90%; height: 15rem; }
-    [data-journey-ready] .journey-step:nth-child(1) { left: 0; top: 0; z-index: 1; }
-    [data-journey-ready] .journey-step:nth-child(2) { left: 5%; top: 4.5rem; z-index: 2; }
-    [data-journey-ready] .journey-step:nth-child(3) { left: 10%; top: 9rem; z-index: 3; }
-    [data-journey-ready] .journey-action { margin-top: auto; }
+    :is([data-journey-ready], [data-journey-complete]) .journey-stage { position: relative; flex: 1; min-height: 0; max-width: 28rem; display: block; }
+    :is([data-journey-ready], [data-journey-complete]) .journey-step { position: absolute; width: 90%; height: 15rem; }
+    :is([data-journey-ready], [data-journey-complete]) .journey-step:nth-child(1) { left: 0; top: 0; z-index: 1; }
+    :is([data-journey-ready], [data-journey-complete]) .journey-step:nth-child(2) { left: 5%; top: 4.5rem; z-index: 2; }
+    :is([data-journey-ready], [data-journey-complete]) .journey-step:nth-child(3) { left: 10%; top: 9rem; z-index: 3; }
+    :is([data-journey-ready], [data-journey-complete]) .journey-action { margin-top: auto; }
+    .care-journey[data-journey-complete] { height: auto; }
+    [data-journey-complete] .journey-panel { position: relative; top: 0; }
+    [data-journey-complete] .journey-step:nth-child(1) { transform: rotate(-3deg); }
+    [data-journey-complete] .journey-step:nth-child(2) { transform: rotate(2deg); }
+    [data-journey-complete] .journey-step:nth-child(3) { transform: rotate(-1deg); }
   }
   @media (prefers-reduced-motion: no-preference) and (min-height: 800px) and (min-width: 64rem) {
-    [data-journey-ready] .journey-stage { max-width: 72rem; }
-    [data-journey-ready] .journey-step { width: 36%; height: 17rem; }
-    [data-journey-ready] .journey-step:nth-child(1) { left: 0; top: 24%; }
-    [data-journey-ready] .journey-step:nth-child(2) { left: 32%; top: 2%; }
-    [data-journey-ready] .journey-step:nth-child(3) { left: 64%; top: 32%; }
+    :is([data-journey-ready], [data-journey-complete]) .journey-stage { max-width: 72rem; }
+    :is([data-journey-ready], [data-journey-complete]) .journey-step { width: 36%; height: 17rem; }
+    :is([data-journey-ready], [data-journey-complete]) .journey-step:nth-child(1) { left: 0; top: 24%; }
+    :is([data-journey-ready], [data-journey-complete]) .journey-step:nth-child(2) { left: 32%; top: 2%; }
+    :is([data-journey-ready], [data-journey-complete]) .journey-step:nth-child(3) { left: 64%; top: 32%; }
+    [data-journey-complete] .journey-step:nth-child(1) { transform: rotate(-6deg); }
+    [data-journey-complete] .journey-step:nth-child(2) { transform: rotate(4deg); }
+    [data-journey-complete] .journey-step:nth-child(3) { transform: rotate(-3deg); }
   }
 </style>
 
@@ -98,18 +106,34 @@ import CareJourneyCard from "../cards/CareJourneyCard.astro";
   import { initMotion } from "../../scripts/motion";
 
   document.querySelectorAll<HTMLElement>("[data-care-journey]").forEach((section) => {
-    initMotion(`care-journey-${section.id}`, ({ gsap, select }) => {
+    // Mémoire limitée à cette page : ni retour au scroll ni changement de taille ne rejouent la séquence.
+    let completed = false;
+    initMotion(`care-journey-${section.id}`, ({ gsap, ScrollTrigger, select }) => {
+      if (completed) return;
       const panel = section.querySelector<HTMLElement>("[data-journey-panel]");
       const stage = section.querySelector<HTMLElement>("[data-journey-stage]");
+      const action = section.querySelector<HTMLElement>("[data-journey-action]");
       const cards = select<HTMLElement>("[data-journey-step]");
-      if (!panel || !stage || cards.length !== 3) return;
+      if (!panel || !stage || !action || cards.length !== 3) return;
 
       const media = gsap.matchMedia();
       media.add("(min-height: 800px) and (min-width: 375px)", () => {
+        if (completed) return;
         section.setAttribute("data-journey-ready", "");
         const compact = () => window.matchMedia("(max-width: 63.999rem)").matches;
         const { entranceDuration, readingPause } = animationConfig.careJourney;
-        // GSAP écrit uniquement les transforms/opacités dynamiques nécessaires au scroll réversible.
+        const lastCardArrival = (cards.length - 1) * (entranceDuration + readingPause) + entranceDuration;
+        let completionFrame = 0;
+        action.inert = true;
+        // Cette animation est temporelle : elle se termine même si le visiteur arrête de scroller.
+        const actionReveal = gsap.fromTo(action, { autoAlpha: 0, y: 12 }, {
+          autoAlpha: 1,
+          y: 0,
+          duration: animationConfig.duration.normal,
+          ease: "power2.out",
+          paused: true,
+        });
+        // GSAP écrit uniquement les transforms/opacités dynamiques pendant la première lecture.
         const timeline = gsap.timeline({
           scrollTrigger: {
             trigger: section,
@@ -122,8 +146,8 @@ import CareJourneyCard from "../cards/CareJourneyCard.astro";
 
         cards.forEach((card, index) => {
           timeline.fromTo(card, {
-            x: () => index === 0 ? -stage.offsetWidth : index === 2 ? stage.offsetWidth : 0,
-            y: () => index === 0 ? panel.offsetHeight * 0.35 : index === 1 ? panel.offsetHeight : 0,
+            x: 0,
+            y: () => panel.offsetHeight,
             rotation: index === 0 ? -18 : index === 1 ? 16 : -10,
             opacity: 0,
           }, {
@@ -136,7 +160,60 @@ import CareJourneyCard from "../cards/CareJourneyCard.astro";
           }, index * (entranceDuration + readingPause));
         });
         timeline.to({}, { duration: readingPause });
-        return () => section.removeAttribute("data-journey-ready");
+        const completeJourney = (immediate = false) => {
+          if (completed || (!immediate && timeline.time() < lastCardArrival)) return;
+          completed = true;
+          // Détacher le scroll sans réinitialiser les cartes ; le CTA finit son fondu tout seul.
+          timeline.scrollTrigger?.kill(false, true);
+          timeline.pause(lastCardArrival, true);
+          action.inert = false;
+          if (immediate) {
+            actionReveal.progress(1).pause();
+            section.setAttribute("data-journey-complete", "");
+            ScrollTrigger.refresh();
+            return;
+          }
+          actionReveal.play();
+          completionFrame = requestAnimationFrame(() => {
+            const panelTop = panel.getBoundingClientRect().top;
+            const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+            section.setAttribute("data-journey-complete", "");
+            // Retirer la piste de scroll en conservant exactement la position visuelle du panneau.
+            window.scrollTo({ top: sectionTop - panelTop, behavior: "instant" });
+            ScrollTrigger.refresh();
+          });
+        };
+        timeline.eventCallback("onUpdate", completeJourney);
+        completeJourney();
+
+        const targetBelowJourney = (url: URL): HTMLElement | null => {
+          if (url.origin !== window.location.origin || url.pathname !== window.location.pathname || !url.hash) return null;
+          let target: HTMLElement | null;
+          try { target = document.getElementById(decodeURIComponent(url.hash.slice(1))); }
+          catch { return null; }
+          return target && !section.contains(target) && (section.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING) ? target : null;
+        };
+        // Une navigation directe doit rejoindre sa cible, sans être interrompue par la réduction de hauteur.
+        const handleAnchor = (event: MouseEvent) => {
+          if (completed || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+          const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a[href]") : null;
+          if (!link || link.hasAttribute("download") || (link.target && link.target !== "_self")) return;
+          if (targetBelowJourney(new URL(link.href))) completeJourney(true);
+        };
+        document.addEventListener("click", handleAnchor);
+        const initialTarget = targetBelowJourney(new URL(window.location.href));
+        if (initialTarget && !completed) {
+          completeJourney(true);
+          completionFrame = requestAnimationFrame(() => initialTarget.scrollIntoView({ behavior: "instant", block: "start" }));
+        }
+
+        return () => {
+          cancelAnimationFrame(completionFrame);
+          document.removeEventListener("click", handleAnchor);
+          if (completed) section.setAttribute("data-journey-complete", "");
+          section.removeAttribute("data-journey-ready");
+          action.inert = false;
+        };
       });
 
       return () => media.revert();

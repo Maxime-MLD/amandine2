@@ -1,0 +1,120 @@
+---
+import type { FaqItem } from "../../data/faq";
+
+interface Props { item: FaqItem }
+const { item } = Astro.props;
+const questionId = `faq-question-${item.id}`;
+---
+
+<details class="faq-item" data-faq-item>
+  <summary id={questionId} class="focus-ring" aria-controls={`faq-answer-${item.id}`}>
+    <h3 class="font-normal">{item.question}</h3>
+    <span class="faq-toggle" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+        <path d="M12 5v14M5 12h14" stroke-linecap="round" />
+      </svg>
+    </span>
+  </summary>
+  <div id={`faq-answer-${item.id}`} class="faq-answer" role="region" aria-labelledby={questionId} data-faq-answer>
+    <p>{item.answer}</p>
+    {item.links && (
+      <div class="mt-5 flex flex-wrap gap-3">
+        {item.links.map((link) => link.href && (
+          <a class:list={["btn-primary focus-ring", link.variant === "phone" && "faq-phone"]} href={link.href} aria-label={link.ariaLabel}>
+            {link.label}
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</details>
+
+<style>
+  .faq-item { border-bottom: 1px solid var(--color-border); }
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding-block: 1.5rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary h3 { font-size: clamp(1.0625rem, 1.5vw, 1.375rem); line-height: 1.35; letter-spacing: -0.025em; }
+  .faq-toggle {
+    display: grid;
+    flex-shrink: 0;
+    width: 2.75rem;
+    height: 2.75rem;
+    place-items: center;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+  }
+  .faq-toggle svg { width: 1.25rem; height: 1.25rem; transition: transform 350ms var(--ease-premium); }
+  .faq-item:not([data-faq-ready])[open] .faq-toggle svg,
+  .faq-item[data-expanded="true"] .faq-toggle svg { transform: rotate(45deg); }
+  .faq-answer {
+    max-width: 38rem;
+    padding: 0 0 1.75rem;
+    color: var(--color-text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+  }
+  .faq-phone { background: var(--gradient-journey-contact); color: var(--color-text); }
+  .faq-phone:hover { background: var(--gradient-journey-contact); }
+  @media (min-width: 40rem) { .faq-answer { padding-right: 3.75rem; } }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLDetailsElement>("[data-faq-item]").forEach((details) => {
+    if (details.hasAttribute("data-faq-ready")) return;
+    const summary = details.querySelector<HTMLElement>("summary");
+    const answer = details.querySelector<HTMLElement>("[data-faq-answer]");
+    if (!summary || !answer) return;
+
+    let expanded = details.open;
+    let animation: Animation | undefined;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    details.setAttribute("data-faq-ready", "");
+    details.dataset.expanded = String(expanded);
+
+    const settle = () => {
+      animation?.cancel();
+      animation = undefined;
+      details.open = expanded;
+      // Style dynamique temporaire : la hauteur redevient naturelle après l’animation.
+      details.style.removeProperty("overflow");
+    };
+
+    summary.addEventListener("click", (event) => {
+      event.preventDefault();
+      const fromHeight = details.getBoundingClientRect().height;
+      animation?.cancel();
+      expanded = !expanded;
+      details.dataset.expanded = String(expanded);
+      summary.setAttribute("aria-expanded", String(expanded));
+      answer.inert = !expanded;
+
+      if (reducedMotion.matches || typeof details.animate !== "function") {
+        settle();
+        return;
+      }
+
+      details.open = true;
+      const borderHeight = details.offsetHeight - details.clientHeight;
+      const toHeight = summary.getBoundingClientRect().height + (expanded ? answer.getBoundingClientRect().height : 0) + borderHeight;
+      details.style.overflow = "hidden";
+      // WAAPI anime la hauteur mesurée, sans hauteur maximale arbitraire ni dépendance.
+      animation = details.animate({ height: [`${fromHeight}px`, `${toHeight}px`] }, {
+        duration: 380,
+        delay: expanded ? 60 : 0,
+        easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+        fill: "both",
+      });
+      animation.onfinish = settle;
+    });
+    reducedMotion.addEventListener("change", () => { if (reducedMotion.matches) settle(); });
+  });
+</script>

@@ -20,9 +20,9 @@
   --color-hero-orb-edge: rgb(255 255 255 / 0.35);
   --color-care-pink: #f4b9cf;
   --color-journey-lilac: #dcd9ff;
-  --color-journey-orange: #ffc58e;
-  --color-journey-coral: #f8b1a4;
-  --color-journey-rose: #ee9fc4;
+  --color-journey-orange: #f9dfc5;
+  --color-journey-coral: #f4d8d2;
+  --color-journey-rose: #efd4e3;
   --color-care-orange: #ffe0b5;
   --color-care-icon: #a65170;
   --color-care-bubble: rgb(255 255 255 / 0.26);
@@ -31,10 +31,12 @@
   --color-photo-clear: rgb(19 27 36 / 0);
   --gradient-care: linear-gradient(115deg, var(--color-care-orange), var(--color-pink-soft) 45%, var(--color-care-pink));
   --gradient-journey-contact: linear-gradient(135deg, var(--color-blue-soft), var(--color-journey-lilac));
+  --gradient-contact-section: linear-gradient(135deg, var(--color-blue-soft), var(--color-lilac-soft) 45%, var(--color-journey-lilac));
   --gradient-journey-appointment: linear-gradient(160deg, var(--color-blue-soft), var(--color-journey-lilac) 22%, var(--color-peach-soft) 78%, var(--color-care-orange));
   --gradient-journey-care: linear-gradient(120deg, var(--color-journey-orange) 5%, var(--color-journey-coral) 48%, var(--color-journey-rose) 100%);
   --gradient-contact: radial-gradient(ellipse at 0% 0%, var(--color-pink-soft), transparent 57%), radial-gradient(ellipse at 100% 100%, var(--color-blue-soft), var(--color-lilac-soft) 12%, transparent 55%);
   --gradient-photo-caption: linear-gradient(0deg, var(--color-photo-shade), var(--color-photo-clear));
+  --gradient-final-cta: linear-gradient(25deg, var(--color-peach-soft), var(--color-pink-soft) 38%, var(--color-lilac-soft) 64%, var(--color-blue-soft));
 
   /* Gradients */
   --gradient-hero: linear-gradient(

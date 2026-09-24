@@ -1,5 +1,3 @@
-import { businessConfig } from "./business.config";
-import { createTelHref } from "../utils/links";
 
 export interface NavigationItem {
   label: string;
@@ -46,7 +44,7 @@ export const navigationConfig = {
   ],
   appointment: {
     label: "Prendre rendez-vous",
-    href: createTelHref(businessConfig.contact.phoneNormalized) ?? "/contact",
+    href: "/#contact",
     ariaLabel: "Contacter Amandine Gauthier pour prendre rendez-vous",
   },
   legalItems: [

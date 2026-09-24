@@ -1,54 +1,47 @@
 ---
-import { businessConfig } from "../../config/business.config";
-import { createMailtoHref, createTelHref } from "../../utils/links";
+import { contactConfig } from "../../config/contact.config";
 import ContactForm from "../forms/ContactForm.astro";
-import Container from "../ui/Container.astro";
-import Section from "../ui/Section.astro";
-import SectionHeader from "../ui/SectionHeader.astro";
-
-export interface Props {
-  title?: string;
-  description?: string;
-}
-
-const {
-  title = "TODO_CONTACT_SECTION_TITLE",
-  description = "TODO_CONTACT_SECTION_DESCRIPTION",
-} = Astro.props as Props;
-const phoneHref = createTelHref(businessConfig.contact.phoneNormalized);
-const emailHref = createMailtoHref(businessConfig.contact.email);
 ---
 
-<Section id="contact" spacing="lg" width="full" aria-labelledby="contact-title">
-  <Container>
-    <div class="grid min-w-0 gap-10 lg:grid-cols-2">
-      <div class="min-w-0">
-        <SectionHeader title={title} description={description} headingId="contact-title" />
-
-        <address class="safe-wrap mt-8 flex min-w-0 flex-col gap-3 not-italic">
-          {
-            phoneHref ? (
-              <a class="focus-ring rounded-[var(--radius-sm)]" href={phoneHref}>
-                {businessConfig.contact.phoneDisplay}
-              </a>
-            ) : (
-              <span>{businessConfig.contact.phoneDisplay}</span>
-            )
-          }
-          {
-            emailHref ? (
-              <a class="focus-ring rounded-[var(--radius-sm)]" href={emailHref}>
-                {businessConfig.contact.email}
-              </a>
-            ) : (
-              <span>{businessConfig.contact.email}</span>
-            )
-          }
-          <p>{businessConfig.address.formatted}</p>
-        </address>
+<section id="contact" class="contact-section" aria-labelledby="contact-title">
+  <div class="contact-copy">
+    <h2 id="contact-title" class="font-normal">{contactConfig.title}<br />{contactConfig.titleSecondLine}</h2>
+    <p class="mt-6 max-w-[22rem] text-base leading-relaxed text-[var(--color-text-secondary)]">{contactConfig.description}</p>
+    <address class="mt-10 flex flex-col gap-9 not-italic">
+      <div>
+        <p class="mb-3 text-sm text-[var(--color-text-secondary)]">{contactConfig.phoneLabel}</p>
+        <a class="contact-phone focus-ring" href={contactConfig.phoneHref}>{contactConfig.phone}</a>
       </div>
+      <div>
+        <p class="mb-3 text-sm text-[var(--color-text-secondary)]">{contactConfig.addressLabel}</p>
+        <p class="text-lg leading-relaxed">{contactConfig.street}<br />{contactConfig.city}</p>
+        <p class="mt-2 text-sm text-[var(--color-text-secondary)]">{contactConfig.appointmentNote}</p>
+        <a class="focus-ring mt-5 inline-block text-sm underline underline-offset-4" href={contactConfig.directionsHref} target="_blank" rel="noopener noreferrer">{contactConfig.directionsLabel}</a>
+      </div>
+    </address>
+  </div>
+  <div class="contact-form-panel min-w-0">
+    <h3 class="mb-6 text-2xl font-normal tracking-tight">{contactConfig.formTitle}</h3>
+    <ContactForm />
+  </div>
+</section>
 
-      <ContactForm />
-    </div>
-  </Container>
-</Section>
+<style>
+  .contact-section {
+    display: grid;
+    gap: 3rem;
+    margin: clamp(3rem, 6vw, 6rem) clamp(0.5rem, 3vw, 3rem);
+    padding: clamp(1.25rem, 4vw, 4rem);
+    border-radius: var(--radius-xl);
+    background-image: var(--gradient-contact-section);
+    scroll-margin-top: 2rem;
+  }
+  .contact-copy h2 { font-size: clamp(2.5rem, 4.2vw, 3.875rem); line-height: 1.05; letter-spacing: -0.045em; }
+  .contact-phone { font-size: clamp(1.5rem, 2.8vw, 2.25rem); letter-spacing: -0.025em; text-decoration: none; }
+  .contact-phone:hover { text-decoration: underline; }
+  .contact-form-panel { background: var(--color-surface); border-radius: var(--radius-xl); padding: clamp(1.25rem, 2.5vw, 2.5rem); }
+  @media (min-width: 64rem) {
+    .contact-section { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr); gap: clamp(3rem, 6vw, 6rem); }
+    .contact-copy { align-self: center; }
+  }
+</style>

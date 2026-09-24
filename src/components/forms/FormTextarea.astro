@@ -29,7 +29,7 @@ const describedBy = [helpId, errorId].filter(Boolean).join(" ");
 ---
 
 <div class:list={["min-w-0", className]} data-form-field>
-  <label class="safe-wrap block font-semibold" for={id}>
+  <label class="safe-wrap block text-sm font-normal" for={id}>
     {label}{required && <span aria-hidden="true"> *</span>}
   </label>
   {
@@ -47,7 +47,7 @@ const describedBy = [helpId, errorId].filter(Boolean).join(" ");
     minlength={minlength}
     maxlength={maxlength}
     aria-describedby={describedBy || undefined}
-    class="focus-ring mt-2 w-full min-w-0 resize-y rounded-[var(--radius-md)] border border-[var(--color-border-strong)] bg-[var(--color-surface)] px-4 py-3 text-[var(--color-text)] disabled:cursor-not-allowed disabled:opacity-60"
+    class="focus-ring mt-2 w-full min-w-0 resize-y rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-frame)] px-4 py-3 text-[var(--color-text)] disabled:cursor-not-allowed disabled:opacity-60"
     data-form-control
   ></textarea>
   <p

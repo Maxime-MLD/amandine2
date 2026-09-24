@@ -29,6 +29,7 @@ export interface ContactFormConfig {
     submit: string;
     loading: string;
     requiredHint: string;
+    sensitiveDataHint: string;
   };
   messages: {
     validation: string;
@@ -42,38 +43,39 @@ export interface ContactFormConfig {
 
 export const contactFormConfig = {
   fields: {
-    firstName: { enabled: true, required: true },
+    firstName: { enabled: false, required: false },
     lastName: { enabled: true, required: true },
-    phone: { enabled: true, required: false },
-    email: { enabled: true, required: true },
-    service: { enabled: true, required: true },
+    phone: { enabled: true, required: true },
+    email: { enabled: true, required: false },
+    service: { enabled: false, required: false },
     message: { enabled: true, required: true },
     consent: { enabled: true, required: true },
   },
-  subject: "TODO_CONTACT_FORM_EMAIL_SUBJECT",
-  successPath: "/merci/",
+  subject: "Nouvelle demande de rendez-vous — site Amandine Gauthier",
+  successPath: "",
   labels: {
     firstName: "Prénom",
-    lastName: "Nom",
+    lastName: "Nom complet",
     phone: "Téléphone",
     email: "E-mail",
     service: "Service ou type de demande",
     servicePlaceholder: "Sélectionnez une option",
-    otherService: "TODO_FORM_OTHER_REQUEST_LABEL",
+    otherService: "Autre demande",
     message: "Message",
-    consentText: "TODO_FORM_PRIVACY_CONSENT_TEXT",
+    consentText: "J’accepte que mes coordonnées soient utilisées pour répondre à ma demande. Consulter la",
     privacyPolicy: "politique de confidentialité",
-    submit: "Envoyer la demande",
+    submit: "Envoyer ma demande",
     loading: "Envoi en cours…",
     requiredHint: "Les champs marqués d’un astérisque sont obligatoires.",
+    sensitiveDataHint: "Merci de ne pas transmettre d’informations médicales sensibles dans ce message.",
   },
   messages: {
     validation: "Vérifiez les champs signalés avant de continuer.",
     captcha: "Veuillez confirmer que vous n’êtes pas un robot.",
     loading: "Votre demande est en cours d’envoi.",
-    success: "Votre demande a bien été envoyée. Redirection en cours…",
+    success: "Votre demande a bien été envoyée. Votre rendez-vous sera confirmé lors de notre échange.",
     error: "L’envoi a échoué. Réessayez dans quelques instants ou utilisez les coordonnées de contact.",
     configuration:
-      "Configuration développeur incomplète : ajoutez PUBLIC_WEB3FORMS_ACCESS_KEY dans le fichier .env puis relancez le serveur.",
+      "Le formulaire est en cours d’activation. Pour organiser vos soins, contactez-moi par téléphone.",
   },
 } as const satisfies ContactFormConfig;

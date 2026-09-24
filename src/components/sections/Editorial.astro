@@ -1,7 +1,8 @@
 ---
 import { homeConfig } from "../../config/home.config";
+import ResponsiveImage from "../ui/ResponsiveImage.astro";
 
-const { message } = homeConfig.editorial;
+const { message, images, imagesNote } = homeConfig.editorial;
 const words = message.split(/\s+/);
 ---
 
@@ -16,6 +17,27 @@ const words = message.split(/\s+/);
         ))}
       </span>
     </h2>
+    <figure class="editorial-gallery">
+      <div class="editorial-images">
+        {images.map((image) => (
+          <div class="editorial-circle">
+            <ResponsiveImage
+              src={image.src}
+              alt={image.alt}
+              width={image.src.width}
+              height={image.src.height}
+              widths={[180, 320, 480, 640, 800]}
+              sizes="(min-width: 1440px) 310px, (min-width: 768px) 22vw, 42vw"
+              formats={["webp"]}
+              fallbackFormat="webp"
+              quality={85}
+              class="w-full"
+            />
+          </div>
+        ))}
+      </div>
+      <figcaption class="mt-4 text-center text-xs text-[var(--color-text-secondary)]">{imagesNote}</figcaption>
+    </figure>
   </div>
 </section>
 
@@ -23,9 +45,11 @@ const words = message.split(/\s+/);
   .editorial { position: relative; }
   .editorial-panel {
     display: flex;
-    min-height: 100svh;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(2rem, 4vw, 3.75rem);
     align-items: center;
-    padding: clamp(3rem, 8vh, 7rem) clamp(1.25rem, 4vw, 4.75rem);
+    padding: clamp(3rem, 6vh, 5rem) clamp(1.25rem, 4vw, 4.75rem);
   }
   .editorial-message {
     width: 100%;
@@ -40,6 +64,19 @@ const words = message.split(/\s+/);
     text-wrap: pretty;
   }
   .editorial-word { display: inline-block; }
+  .editorial-gallery { width: 100%; margin: 0; }
+  .editorial-images { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(0.75rem, 1.2vw, 1.25rem); }
+  .editorial-circle { aspect-ratio: 1; overflow: hidden; border-radius: var(--radius-pill); background: var(--color-surface); }
+  .editorial-circle :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .editorial-circle :global(picture) { display: block; height: 100%; }
+
+  @media (min-width: 48rem) {
+    .editorial-images { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+  @media (min-width: 64rem) and (min-height: 50rem) {
+    .editorial-panel { min-height: 100svh; }
+    .editorial-message { font-size: min(var(--font-size-editorial), 7svh); }
+  }
 
   /* Le texte reste lisible sans JS. L'espace de scroll n'existe qu'après initialisation. */
   @media (prefers-reduced-motion: no-preference) {
@@ -62,24 +99,29 @@ const words = message.split(/\s+/);
       const panel = section.querySelector<HTMLElement>("[data-editorial-panel]");
       if (!panel || !words.length) return;
 
-      section.setAttribute("data-editorial-ready", "");
-      // Les opacités inline sont écrites uniquement par GSAP pour la progression liée au scroll.
-      gsap.set(words, { opacity: animationConfig.editorial.mutedOpacity });
-      gsap.to(words, {
-        opacity: 1,
-        duration: animationConfig.editorial.wordDuration,
-        stagger: animationConfig.editorial.wordStagger,
-        ease: "none",
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: () => `+=${Math.max(1, section.offsetHeight - panel.offsetHeight)}`,
-          scrub: true,
-          invalidateOnRefresh: true,
-        },
-      });
+      const media = gsap.matchMedia();
+      media.add({ pinned: "(min-width: 64rem) and (min-height: 50rem)", flowing: "(max-width: 63.999rem), (max-height: 49.999rem)" }, (context) => {
+        const pinned = Boolean(context.conditions?.pinned);
+        if (pinned) section.setAttribute("data-editorial-ready", "");
+        // Les opacités inline sont écrites uniquement par GSAP pour la progression liée au scroll.
+        gsap.set(words, { opacity: animationConfig.editorial.mutedOpacity });
+        gsap.to(words, {
+          opacity: 1,
+          duration: animationConfig.editorial.wordDuration,
+          stagger: animationConfig.editorial.wordStagger,
+          ease: "none",
+          scrollTrigger: {
+            trigger: pinned ? section : section.querySelector("h2"),
+            start: pinned ? "top top" : "top 85%",
+            end: () => pinned ? `+=${Math.max(1, section.offsetHeight - panel.offsetHeight)}` : "bottom 45%",
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+        });
 
-      return () => section.removeAttribute("data-editorial-ready");
+        return () => section.removeAttribute("data-editorial-ready");
+      });
+      return () => media.revert();
     }, { scope: section });
   });
 </script>
