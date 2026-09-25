@@ -1,7 +1,7 @@
-import tension from "../assets/images/patient-tension.png";
-import senior from "../assets/images/patient-senior.png";
-import homme from "../assets/images/patient-homme.png";
-import accompagnement from "../assets/images/patient-accompagnement.png";
+import tension from "../assets/images/editorial/patient-tension.png";
+import senior from "../assets/images/editorial/patient-senior.png";
+import homme from "../assets/images/editorial/patient-homme.png";
+import accompagnement from "../assets/images/editorial/patient-accompagnement.png";
 import { businessConfig } from "../config/business.config";
 import { createTelHref } from "../utils/links";
 

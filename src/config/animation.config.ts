@@ -19,7 +19,12 @@ export interface AnimationConfig {
     wordStagger: number;
   };
   mobileDistanceScale: number;
-  careJourney: { entranceDuration: number; readingPause: number };
+  careJourney: {
+    introDuration: number;
+    introStagger: number;
+    activationDuration: number;
+    desktopScrollViewport: number;
+  };
   mediaQueries: {
     reducedMotion: string;
     motionAllowed: string;
@@ -51,7 +56,12 @@ export const animationConfig = {
     wordStagger: 0.85,
   },
   mobileDistanceScale: 0.65,
-  careJourney: { entranceDuration: 1, readingPause: 0.6 },
+  careJourney: {
+    introDuration: 0.65,
+    introStagger: 0.07,
+    activationDuration: 0.55,
+    desktopScrollViewport: 1.1,
+  },
   mediaQueries: {
     reducedMotion: "(prefers-reduced-motion: reduce)",
     motionAllowed: "(prefers-reduced-motion: no-preference)",

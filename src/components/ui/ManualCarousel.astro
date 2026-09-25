@@ -35,16 +35,27 @@ const { id, label, count, labels, variant = "care" } = Astro.props;
   .carousel-track::-webkit-scrollbar { display: none; }
   .carousel-controls { position: absolute; z-index: 2; right: 0.625rem; bottom: 0.625rem; left: 0.625rem; display: flex; align-items: center; justify-content: space-between; gap: 0.125rem; }
   .carousel-controls[hidden] { display: none; }
-  .carousel-arrow { display: inline-flex; width: 2.75rem; height: 2.75rem; flex-shrink: 0; align-items: center; justify-content: center; border: 0; border-radius: var(--radius-pill); cursor: pointer; background: var(--color-hero-badge); }
+  .carousel-arrow { display: inline-flex; width: 2.75rem; height: 2.75rem; flex-shrink: 0; align-items: center; justify-content: center; border: 0; border-radius: var(--radius-pill); cursor: pointer; background: var(--color-hero-badge); transition: transform 180ms ease, background-color 180ms ease; }
+  .carousel-arrow:hover { transform: scale(1.05); }
   .carousel-dots { display: flex; min-width: 0; flex: 1; justify-content: center; }
   .carousel-dot { display: flex; min-width: 0; width: 1.625rem; height: 2.75rem; align-items: center; justify-content: center; border: 0; cursor: pointer; }
-  .carousel-dot span { display: block; width: 0.3125rem; height: 0.3125rem; border-radius: var(--radius-pill); background: currentColor; opacity: 0.3; }
+  .carousel-dot span { display: block; width: 0.3125rem; height: 0.3125rem; border-radius: var(--radius-pill); background: currentColor; opacity: 0.3; transition: width 260ms ease, opacity 260ms ease; }
   .carousel-dot[aria-current="true"] span { width: 0.875rem; opacity: 1; }
+  .care .carousel-controls { inset: 0; pointer-events: none; }
+  .care .carousel-arrow { position: absolute; top: 4.75rem; pointer-events: auto; transform: translateY(-50%); background: color-mix(in srgb, var(--color-surface) 72%, transparent); }
+  .care .carousel-arrow:hover { transform: translateY(-50%) scale(1.05); }
+  .care [data-carousel-prev] { left: calc(50% - 7.25rem); }
+  .care [data-carousel-next] { right: calc(50% - 7.25rem); }
+  .care .carousel-dots { position: absolute; right: 3.75rem; bottom: 0.625rem; left: 3.75rem; flex: none; pointer-events: auto; }
   .photos .carousel-controls { color: var(--color-surface); }
   .photos .carousel-arrow { background: var(--color-photo-shade); }
   .photos .carousel-dot { width: 100%; }
   .photos .carousel-dot span { width: 80%; height: 0.1875rem; }
   .photos .focus-ring:focus-visible { outline-color: var(--color-surface); }
+  @media (prefers-reduced-motion: reduce) {
+    .carousel-arrow,
+    .carousel-dot span { transition: none; }
+  }
 </style>
 
 <script>
@@ -58,12 +69,29 @@ const { id, label, count, labels, variant = "care" } = Astro.props;
     const dots = [...root.querySelectorAll<HTMLButtonElement>("[data-carousel-dot]")];
     if (!track || !previous || !next || !controls || !status || !dots.length) return;
     const slides = [...track.children].filter((slide): slide is HTMLElement => slide instanceof HTMLElement);
+    if (slides.length < 2) return;
+
+    const cloneForLoop = (slide: HTMLElement) => {
+      const clone = slide.cloneNode(true) as HTMLElement;
+      clone.dataset.carouselClone = "";
+      clone.setAttribute("aria-hidden", "true");
+      clone.inert = true;
+      clone.querySelectorAll<HTMLElement>("[id]").forEach((element) => element.removeAttribute("id"));
+      return clone;
+    };
+    const leadingClone = cloneForLoop(slides[slides.length - 1]);
+    const trailingClone = cloneForLoop(slides[0]);
+    track.prepend(leadingClone);
+    track.append(trailingClone);
+
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let index = 0;
     let requestedIndex = 0;
+    let animationFrame = 0;
+    let resettingLoop = false;
 
-    const update = () => {
-      index = Math.max(0, Math.min(slides.length - 1, Math.round(track.scrollLeft / track.clientWidth)));
+    const renderIndex = (nextIndex: number) => {
+      index = Math.max(0, Math.min(slides.length - 1, nextIndex));
       requestedIndex = index;
       dots.forEach((dot, i) => {
         if (i === index) dot.setAttribute("aria-current", "true");
@@ -73,9 +101,64 @@ const { id, label, count, labels, variant = "care" } = Astro.props;
       status.textContent = `${root.dataset.positionLabel} ${index + 1} / ${slides.length} — ${slides[index]?.dataset.carouselLabel ?? ""}`;
     };
 
+    const update = () => {
+      if (!track.clientWidth || resettingLoop) return;
+      const physicalIndex = Math.round(track.scrollLeft / track.clientWidth);
+      if (physicalIndex <= 0) {
+        resettingLoop = true;
+        track.scrollTo({ left: track.clientWidth * slides.length, behavior: "auto" });
+        resettingLoop = false;
+        renderIndex(slides.length - 1);
+        return;
+      }
+      if (physicalIndex >= slides.length + 1) {
+        resettingLoop = true;
+        track.scrollTo({ left: track.clientWidth, behavior: "auto" });
+        resettingLoop = false;
+        renderIndex(0);
+        return;
+      }
+      renderIndex(physicalIndex - 1);
+    };
+
     const goTo = (target: number) => {
-      requestedIndex = (target + slides.length) % slides.length;
-      track.scrollTo({ left: track.clientWidth * requestedIndex, behavior: reducedMotion.matches ? "instant" : "smooth" });
+      const normalizedTarget = (target + slides.length) % slides.length;
+      const wrapsForward = requestedIndex === slides.length - 1 && normalizedTarget === 0;
+      const wrapsBackward = requestedIndex === 0 && normalizedTarget === slides.length - 1;
+      requestedIndex = normalizedTarget;
+      const physicalTarget = wrapsForward
+        ? slides.length + 1
+        : wrapsBackward
+          ? 0
+          : normalizedTarget + 1;
+      const targetLeft = track.clientWidth * physicalTarget;
+      window.cancelAnimationFrame(animationFrame);
+
+      if (reducedMotion.matches) {
+        track.scrollTo({ left: targetLeft, behavior: "auto" });
+        update();
+        return;
+      }
+
+      const startLeft = track.scrollLeft;
+      const distance = targetLeft - startLeft;
+      const duration = 560;
+      const startedAt = performance.now();
+      const animate = (time: number) => {
+        const progress = Math.min((time - startedAt) / duration, 1);
+        const eased = progress < 0.5
+          ? 4 * progress ** 3
+          : 1 - ((-2 * progress + 2) ** 3) / 2;
+        track.scrollLeft = startLeft + distance * eased;
+        if (progress < 1) animationFrame = window.requestAnimationFrame(animate);
+        else {
+          animationFrame = 0;
+          if (wrapsForward) track.scrollTo({ left: track.clientWidth, behavior: "auto" });
+          else if (wrapsBackward) track.scrollTo({ left: track.clientWidth * slides.length, behavior: "auto" });
+          renderIndex(normalizedTarget);
+        }
+      };
+      animationFrame = window.requestAnimationFrame(animate);
     };
     previous.addEventListener("click", () => goTo(requestedIndex - 1));
     next.addEventListener("click", () => goTo(requestedIndex + 1));
@@ -85,14 +168,18 @@ const { id, label, count, labels, variant = "care" } = Astro.props;
       event.preventDefault();
       goTo(event.key === "Home" ? 0 : event.key === "End" ? slides.length - 1 : requestedIndex + (event.key === "ArrowRight" ? 1 : -1));
     });
+    track.addEventListener("pointerdown", () => window.cancelAnimationFrame(animationFrame));
+    track.addEventListener("wheel", () => window.cancelAnimationFrame(animationFrame), { passive: true });
     // Native scroll-snap supports touch; scrollend updates controls only after user navigation.
     track.addEventListener("scrollend", update);
     const resizeObserver = new ResizeObserver(() => {
-      track.scrollTo({ left: track.clientWidth * index, behavior: "instant" });
+      window.cancelAnimationFrame(animationFrame);
+      track.scrollTo({ left: track.clientWidth * (index + 1), behavior: "auto" });
     });
     resizeObserver.observe(track);
     controls.hidden = false;
     root.dataset.initialized = "true";
-    update();
+    track.scrollTo({ left: track.clientWidth, behavior: "auto" });
+    renderIndex(0);
   });
 </script>

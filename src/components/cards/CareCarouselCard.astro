@@ -7,8 +7,8 @@ const { care, carousel } = careOverview;
 <article class="care-card relative isolate min-h-[23rem] min-w-0 overflow-hidden rounded-[var(--radius-lg)]">
   <div class="bubbles" aria-hidden="true">{Array.from({ length: 18 }, () => <span></span>)}</div>
   <div class="relative z-10 pt-8 text-center">
-    <p class="text-[0.6875rem] text-[var(--color-care-icon)]">{care.subtitle}</p>
-    <h2 class="mt-2 text-[1.875rem] leading-tight font-normal tracking-[-0.04em]">{care.title}</h2>
+    <p class="care-eyebrow">{care.subtitle}</p>
+    <h2 class="mt-3 text-[length:var(--font-size-card-title)] leading-tight font-normal tracking-[-0.04em]">{care.title}</h2>
   </div>
   <div class="relative z-10 h-[16.5rem]">
     <ManualCarousel id="care-carousel" label={care.title} count={care.items.length} labels={carousel.care}>
@@ -24,6 +24,18 @@ const { care, carousel } = careOverview;
 
 <style>
   .care-card { background: var(--gradient-care); }
+  .care-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.5rem;
+    padding: 0.2rem 0.65rem;
+    border: 1px solid color-mix(in srgb, var(--color-care-icon) 28%, transparent);
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+    color: var(--color-care-icon);
+    font-size: 0.625rem;
+    line-height: 1;
+  }
   .care-slide { display: flex; min-width: 0; align-items: center; flex-direction: column; padding: 1.5rem 1rem 4rem; scroll-snap-align: start; scroll-snap-stop: always; }
   .icon-disc { display: flex; width: 6.5rem; height: 6.5rem; flex-shrink: 0; align-items: center; justify-content: center; border-radius: var(--radius-pill); background: var(--color-surface); color: var(--color-care-icon); }
   .bubbles { position: absolute; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; }

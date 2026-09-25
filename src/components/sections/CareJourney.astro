@@ -5,24 +5,40 @@ import CareJourneyCard from "../cards/CareJourneyCard.astro";
 
 <section id="prise-en-charge" class="care-journey" aria-labelledby="journey-title" data-care-journey>
   <div class="journey-panel" data-journey-panel>
-    <header class="journey-heading relative z-10 mx-auto text-center">
+    <header class="journey-heading" data-journey-heading data-motion>
       <h2 id="journey-title" class="font-normal">
         {careJourney.title}<br />{careJourney.titleSecondLine}
       </h2>
-      <p class="mx-auto mt-5 max-w-[29rem] text-sm leading-relaxed text-[var(--color-text-secondary)] sm:text-base">
+      <p class="mt-5 max-w-[29rem] text-sm leading-relaxed text-[var(--color-text-secondary)] sm:text-base">
         {careJourney.description}
       </p>
     </header>
 
     <ol class="journey-stage" data-journey-stage>
-      {careJourney.steps.map((step) => (
-        <li class="journey-step" data-journey-step data-motion>
+      {careJourney.steps.map((step, index) => (
+        <li class="journey-step" data-journey-step data-step-index={index} data-motion>
           <CareJourneyCard step={step} />
         </li>
       ))}
     </ol>
 
-    <div class="journey-action relative z-10 text-center" data-journey-action data-motion>
+    <div class="journey-progress" data-journey-progress data-motion aria-hidden="true">
+      <div class="journey-progress-track">
+        <span class="journey-progress-fill" data-journey-progress-fill></span>
+        {careJourney.steps.map((step, index) => (
+          <span
+            class:list={[
+              "journey-progress-dot",
+              `journey-progress-dot--${index + 1}`,
+              `journey-progress-dot--${step.tone}`,
+            ]}
+            data-journey-progress-dot
+          ></span>
+        ))}
+      </div>
+    </div>
+
+    <div class="journey-action text-center" data-journey-action data-motion>
       <a href={careJourney.contact.href} aria-label={careJourney.contact.ariaLabel} class="btn-primary focus-ring">
         {careJourney.contact.label}
         <span aria-hidden="true">↗</span>
@@ -34,70 +50,128 @@ import CareJourneyCard from "../cards/CareJourneyCard.astro";
 <style>
   .care-journey {
     position: relative;
-    margin-inline: clamp(0.5rem, 3vw, 3rem);
-    margin-bottom: clamp(4rem, 8vw, 8rem);
+    margin-inline: var(--section-inline-margin);
+    margin-bottom: var(--section-gap);
+    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+    background: var(--color-surface);
   }
   .journey-panel {
     display: flex;
+    width: 100%;
     flex-direction: column;
-    gap: 2rem;
-    padding: clamp(2.5rem, 5vh, 4rem) clamp(1rem, 3vw, 3rem) 2rem;
-    border-radius: var(--radius-xl);
+    gap: clamp(1.75rem, 3vw, 2.5rem);
+    padding: clamp(2.5rem, 5vh, 4rem) max(0.5rem, calc(var(--content-axis) - var(--section-inline-margin))) clamp(3rem, 5vw, 5rem);
+    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
     background: var(--color-surface);
   }
+  .journey-heading {
+    width: 100%;
+    max-width: 72rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+  .journey-heading p { margin-inline: auto; }
   .journey-heading h2 {
     font-size: clamp(1.875rem, 4.2vw, 3.875rem);
     line-height: 1.06;
     letter-spacing: -0.045em;
   }
   .journey-stage {
+    --journey-grid-gap: 1rem;
     display: grid;
-    gap: 1rem;
+    gap: var(--journey-grid-gap);
     width: 100%;
     max-width: 72rem;
-    margin: 0 auto;
+    margin: clamp(1rem, 2.25vw, 2.25rem) auto 0;
     padding: 0;
     list-style: none;
   }
   .journey-step { min-width: 0; }
+  .journey-progress {
+    width: min(100% - 2rem, 68rem);
+    margin-inline: auto;
+    padding-block: 0.25rem;
+  }
+  .journey-progress-track {
+    position: relative;
+    height: 3px;
+    background: var(--journey-progress-track);
+  }
+  .journey-progress-fill {
+    position: absolute;
+    inset: 0;
+    background: var(--journey-progress-gradient);
+    filter: saturate(1.28) brightness(0.97);
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+  .journey-progress-dot {
+    --journey-dot-progress: 0;
+    position: absolute;
+    top: 50%;
+    width: 0.9375rem;
+    height: 0.9375rem;
+    border: 2px solid var(--color-surface);
+    border-radius: var(--radius-pill);
+    background: var(--journey-inactive);
+    box-shadow: 0 0 0 1px var(--journey-progress-track);
+    transform: translate(-50%, -50%);
+  }
+  .journey-progress-dot::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: var(--journey-dot-gradient);
+    filter: saturate(1.28) brightness(0.97);
+    opacity: var(--journey-dot-progress);
+  }
+  .journey-progress-dot--1 { left: 0; }
+  .journey-progress-dot--2 { left: 50%; }
+  .journey-progress-dot--3 { left: 100%; }
+  .journey-progress-dot--lilac { --journey-dot-gradient: var(--journey-gradient-01); }
+  .journey-progress-dot--peach { --journey-dot-gradient: var(--journey-gradient-02); }
+  .journey-progress-dot--rose { --journey-dot-gradient: var(--journey-gradient-03); }
   .journey-action a { gap: 1.25rem; }
 
+  .care-journey[data-journey-completed] :global(.journey-card) {
+    --journey-card-progress: 1 !important;
+    box-shadow: var(--journey-card-shadow-active) !important;
+  }
+  .care-journey[data-journey-completed] .journey-progress-fill { transform: scaleX(1) !important; }
+  .care-journey[data-journey-completed] .journey-progress-dot { --journey-dot-progress: 1 !important; }
+
+  @media (min-width: 48rem) and (max-width: 63.999rem) {
+    .journey-stage { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .journey-step:last-child {
+      grid-column: 1 / -1;
+      width: calc((100% - var(--journey-grid-gap)) / 2);
+      justify-self: center;
+    }
+  }
+
   @media (min-width: 64rem) {
+    .care-journey { min-height: calc(100svh - 2rem); }
+    .journey-panel {
+      min-height: calc(100svh - 2rem);
+      justify-content: center;
+    }
+    .journey-heading {
+      max-width: 72rem;
+      margin-inline: auto;
+    }
     .journey-stage { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
 
-  /* Sans JS, mouvement réduit ou écran peu haut : les trois étapes restent en lecture normale. */
-  @media (prefers-reduced-motion: no-preference) and (min-height: 800px) and (min-width: 375px) {
-    .care-journey[data-journey-ready] { height: calc(100svh + var(--journey-scroll-space)); }
-    :is([data-journey-ready], [data-journey-complete]) .journey-panel {
-      position: sticky;
-      top: 1rem;
-      height: calc(100svh - 2rem);
-      max-height: 64rem;
-      overflow: clip;
-      gap: 1.5rem;
-    }
-    :is([data-journey-ready], [data-journey-complete]) .journey-stage { position: relative; flex: 1; min-height: 0; max-width: 28rem; display: block; }
-    :is([data-journey-ready], [data-journey-complete]) .journey-step { position: absolute; width: 90%; height: 15rem; }
-    :is([data-journey-ready], [data-journey-complete]) .journey-step:nth-child(1) { left: 0; top: 0; z-index: 1; }
-    :is([data-journey-ready], [data-journey-complete]) .journey-step:nth-child(2) { left: 5%; top: 4.5rem; z-index: 2; }
-    :is([data-journey-ready], [data-journey-complete]) .journey-step:nth-child(3) { left: 10%; top: 9rem; z-index: 3; }
-    :is([data-journey-ready], [data-journey-complete]) .journey-action { margin-top: auto; }
-    .care-journey[data-journey-complete] { height: auto; }
-    [data-journey-complete] .journey-panel { position: relative; top: 0; }
-    [data-journey-complete] .journey-step:nth-child(1) { transform: rotate(-3deg); }
-    [data-journey-complete] .journey-step:nth-child(2) { transform: rotate(2deg); }
-    [data-journey-complete] .journey-step:nth-child(3) { transform: rotate(-1deg); }
+  @media (max-width: 47.999rem) {
+    .journey-panel { gap: 1.75rem; }
+    .journey-progress { display: none; }
+    .journey-action { margin-top: 0.5rem; }
   }
-  @media (prefers-reduced-motion: no-preference) and (min-height: 800px) and (min-width: 64rem) {
-    :is([data-journey-ready], [data-journey-complete]) .journey-stage { max-width: 72rem; }
-    :is([data-journey-ready], [data-journey-complete]) .journey-step { width: 36%; height: 17rem; }
-    :is([data-journey-ready], [data-journey-complete]) .journey-step:nth-child(1) { left: 0; top: 24%; }
-    :is([data-journey-ready], [data-journey-complete]) .journey-step:nth-child(2) { left: 32%; top: 2%; }
-    :is([data-journey-ready], [data-journey-complete]) .journey-step:nth-child(3) { left: 64%; top: 32%; }
-    [data-journey-complete] .journey-step:nth-child(1) { transform: rotate(-6deg); }
-    [data-journey-complete] .journey-step:nth-child(2) { transform: rotate(4deg); }
-    [data-journey-complete] .journey-step:nth-child(3) { transform: rotate(-3deg); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .journey-progress-fill { transform: scaleX(1); }
+    .journey-progress-dot { --journey-dot-progress: 1; }
   }
 </style>
 
@@ -106,114 +180,202 @@ import CareJourneyCard from "../cards/CareJourneyCard.astro";
   import { initMotion } from "../../scripts/motion";
 
   document.querySelectorAll<HTMLElement>("[data-care-journey]").forEach((section) => {
-    // Mémoire limitée à cette page : ni retour au scroll ni changement de taille ne rejouent la séquence.
-    let completed = false;
-    initMotion(`care-journey-${section.id}`, ({ gsap, ScrollTrigger, select }) => {
-      if (completed) return;
-      const panel = section.querySelector<HTMLElement>("[data-journey-panel]");
-      const stage = section.querySelector<HTMLElement>("[data-journey-stage]");
-      const action = section.querySelector<HTMLElement>("[data-journey-action]");
-      const cards = select<HTMLElement>("[data-journey-step]");
-      if (!panel || !stage || !action || cards.length !== 3) return;
+    let journeyCompleted = section.hasAttribute("data-journey-completed");
+    let furthestProgress = journeyCompleted ? 1 : 0;
+    let validatedSteps = journeyCompleted ? 3 : 0;
 
-      const media = gsap.matchMedia();
-      media.add("(min-height: 800px) and (min-width: 375px)", () => {
-        if (completed) return;
-        section.setAttribute("data-journey-ready", "");
-        const compact = () => window.matchMedia("(max-width: 63.999rem)").matches;
-        const { entranceDuration, readingPause } = animationConfig.careJourney;
-        const lastCardArrival = (cards.length - 1) * (entranceDuration + readingPause) + entranceDuration;
-        let completionFrame = 0;
-        action.inert = true;
-        // Cette animation est temporelle : elle se termine même si le visiteur arrête de scroller.
-        const actionReveal = gsap.fromTo(action, { autoAlpha: 0, y: 12 }, {
+    initMotion(`care-journey-${section.id}`, ({ gsap, ScrollTrigger, select }) => {
+      const panel = section.querySelector<HTMLElement>("[data-journey-panel]");
+      const heading = section.querySelector<HTMLElement>("[data-journey-heading]");
+      const progress = section.querySelector<HTMLElement>("[data-journey-progress]");
+      const progressFill = section.querySelector<HTMLElement>("[data-journey-progress-fill]");
+      const action = section.querySelector<HTMLElement>("[data-journey-action]");
+      const steps = select<HTMLElement>("[data-journey-step]");
+      const cards = select<HTMLElement>("[data-journey-card]");
+      const dots = select<HTMLElement>("[data-journey-progress-dot]");
+      if (!panel || !heading || !progress || !progressFill || !action || cards.length !== 3 || dots.length !== 3) return;
+
+      if (journeyCompleted) {
+        section.setAttribute("data-journey-completed", "");
+        return;
+      }
+
+      const activeShadow = getComputedStyle(section).getPropertyValue("--journey-card-shadow-active").trim();
+      const { introDuration, introStagger, activationDuration, desktopScrollViewport } = animationConfig.careJourney;
+
+      gsap.set(cards, { "--journey-card-progress": 0, boxShadow: "none" });
+      gsap.set(dots, { "--journey-dot-progress": 0 });
+      gsap.set(progressFill, { scaleX: 0, transformOrigin: "left center" });
+
+      gsap.timeline({
+        defaults: { ease: "power2.out" },
+        scrollTrigger: {
+          trigger: section,
+          start: "top 82%",
+          once: true,
+        },
+      })
+        .fromTo(heading, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: introDuration })
+        .fromTo(steps, { autoAlpha: 0, y: 20 }, {
+          autoAlpha: 1,
+          y: 0,
+          duration: introDuration,
+          stagger: introStagger,
+        }, "-=0.38")
+        .fromTo([progress, action], { autoAlpha: 0, y: 12 }, {
           autoAlpha: 1,
           y: 0,
           duration: animationConfig.duration.normal,
-          ease: "power2.out",
-          paused: true,
+          stagger: introStagger,
+        }, "-=0.28");
+
+      const setCompleted = () => {
+        journeyCompleted = true;
+        furthestProgress = 1;
+        validatedSteps = cards.length;
+        section.setAttribute("data-journey-completed", "");
+      };
+
+      const renderValidatedSteps = (duration: number = activationDuration) => {
+        cards.slice(0, validatedSteps).forEach((card) => {
+          gsap.to(card, {
+            "--journey-card-progress": 1,
+            boxShadow: activeShadow,
+            duration,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
         });
-        // GSAP écrit uniquement les transforms/opacités dynamiques pendant la première lecture.
-        const timeline = gsap.timeline({
-          scrollTrigger: {
+        dots.slice(0, validatedSteps).forEach((dot) => {
+          gsap.to(dot, {
+            "--journey-dot-progress": 1,
+            duration,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
+        });
+        gsap.to(progressFill, {
+          scaleX: validatedSteps / cards.length,
+          duration,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+      };
+
+      const activateThrough = (index: number) => {
+        const nextValidatedSteps = Math.max(validatedSteps, index + 1);
+        if (nextValidatedSteps === validatedSteps) return;
+        validatedSteps = nextValidatedSteps;
+        furthestProgress = Math.max(furthestProgress, validatedSteps / cards.length);
+        renderValidatedSteps();
+
+        if (validatedSteps === cards.length) setCompleted();
+      };
+
+      const media = gsap.matchMedia();
+      media.add({
+        desktop: "(min-width: 64rem) and (min-height: 44rem)",
+        tablet: "(min-width: 48rem) and (max-width: 63.999rem), (min-width: 64rem) and (max-height: 43.999rem)",
+        mobile: "(max-width: 47.999rem)",
+      }, (context) => {
+        if (journeyCompleted) return;
+        const conditions = context.conditions as { desktop?: boolean; tablet?: boolean; mobile?: boolean } | undefined;
+
+        if (conditions?.desktop) {
+          const sequence = gsap.timeline({ paused: true, defaults: { ease: "none" } });
+          sequence.to(progressFill, { scaleX: 1, duration: cards.length }, 0);
+          cards.forEach((card, index) => {
+            sequence.to(card, {
+              "--journey-card-progress": 1,
+              boxShadow: activeShadow,
+              duration: 1,
+            }, index);
+            sequence.to(dots[index], {
+              "--journey-dot-progress": 1,
+              duration: 0.25,
+            }, index + 0.75);
+          });
+
+          furthestProgress = Math.max(furthestProgress, validatedSteps / cards.length);
+          sequence.progress(furthestProgress);
+          let releaseTimer = 0;
+          let cancelReleaseWait = () => {};
+          let trigger: ReturnType<typeof ScrollTrigger.create> | undefined;
+
+          const finishDesktopJourney = () => {
+            if (journeyCompleted) return;
+            setCompleted();
+            sequence.progress(1);
+          };
+
+          const releaseCompletedTrigger = () => {
+            if (!journeyCompleted || !trigger) return;
+            const releaseAfterScroll = () => {
+              window.clearTimeout(releaseTimer);
+              releaseTimer = window.setTimeout(() => {
+                window.removeEventListener("scroll", releaseAfterScroll);
+                cancelReleaseWait = () => {};
+                if (!trigger) return;
+                const completedTrigger = trigger;
+                trigger = undefined;
+                const pinDistance = completedTrigger.end - completedTrigger.start;
+                const root = document.documentElement;
+                const previousScrollBehavior = root.style.scrollBehavior;
+                // Le retrait du spacer et la compensation se font dans la même frame.
+                root.style.scrollBehavior = "auto";
+                window.scrollTo(0, Math.max(0, window.scrollY - pinDistance));
+                completedTrigger.kill(true);
+                sequence.kill();
+                root.style.scrollBehavior = previousScrollBehavior;
+              }, 180);
+            };
+
+            window.addEventListener("scroll", releaseAfterScroll, { passive: true });
+            cancelReleaseWait = () => {
+              window.removeEventListener("scroll", releaseAfterScroll);
+              window.clearTimeout(releaseTimer);
+            };
+            releaseAfterScroll();
+          };
+
+          trigger = ScrollTrigger.create({
             trigger: section,
             start: "top 16px",
-            end: () => `+=${Math.max(1, section.offsetHeight - panel.offsetHeight - 16)}`,
-            scrub: true,
+            end: () => `+=${Math.round(window.innerHeight * desktopScrollViewport)}`,
+            pin: panel,
+            pinSpacing: true,
+            anticipatePin: 1,
             invalidateOnRefresh: true,
-          },
-        });
-
-        cards.forEach((card, index) => {
-          timeline.fromTo(card, {
-            x: 0,
-            y: () => panel.offsetHeight,
-            rotation: index === 0 ? -18 : index === 1 ? 16 : -10,
-            opacity: 0,
-          }, {
-            x: 0,
-            y: 0,
-            rotation: () => compact() ? [-3, 2, -1][index] : [-6, 4, -3][index],
-            opacity: 1,
-            duration: entranceDuration,
-            ease: "power2.out",
-          }, index * (entranceDuration + readingPause));
-        });
-        timeline.to({}, { duration: readingPause });
-        const completeJourney = (immediate = false) => {
-          if (completed || (!immediate && timeline.time() < lastCardArrival)) return;
-          completed = true;
-          // Détacher le scroll sans réinitialiser les cartes ; le CTA finit son fondu tout seul.
-          timeline.scrollTrigger?.kill(false, true);
-          timeline.pause(lastCardArrival, true);
-          action.inert = false;
-          if (immediate) {
-            actionReveal.progress(1).pause();
-            section.setAttribute("data-journey-complete", "");
-            ScrollTrigger.refresh();
-            return;
-          }
-          actionReveal.play();
-          completionFrame = requestAnimationFrame(() => {
-            const panelTop = panel.getBoundingClientRect().top;
-            const sectionTop = section.getBoundingClientRect().top + window.scrollY;
-            section.setAttribute("data-journey-complete", "");
-            // Retirer la piste de scroll en conservant exactement la position visuelle du panneau.
-            window.scrollTo({ top: sectionTop - panelTop, behavior: "instant" });
-            ScrollTrigger.refresh();
+            onUpdate: (self) => {
+              if (journeyCompleted) {
+                sequence.progress(1);
+                return;
+              }
+              furthestProgress = Math.max(furthestProgress, self.progress);
+              validatedSteps = Math.max(validatedSteps, Math.floor(furthestProgress * cards.length));
+              sequence.progress(furthestProgress);
+              if (furthestProgress >= 0.999) finishDesktopJourney();
+            },
+            onLeave: releaseCompletedTrigger,
           });
-        };
-        timeline.eventCallback("onUpdate", completeJourney);
-        completeJourney();
 
-        const targetBelowJourney = (url: URL): HTMLElement | null => {
-          if (url.origin !== window.location.origin || url.pathname !== window.location.pathname || !url.hash) return null;
-          let target: HTMLElement | null;
-          try { target = document.getElementById(decodeURIComponent(url.hash.slice(1))); }
-          catch { return null; }
-          return target && !section.contains(target) && (section.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING) ? target : null;
-        };
-        // Une navigation directe doit rejoindre sa cible, sans être interrompue par la réduction de hauteur.
-        const handleAnchor = (event: MouseEvent) => {
-          if (completed || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-          const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a[href]") : null;
-          if (!link || link.hasAttribute("download") || (link.target && link.target !== "_self")) return;
-          if (targetBelowJourney(new URL(link.href))) completeJourney(true);
-        };
-        document.addEventListener("click", handleAnchor);
-        const initialTarget = targetBelowJourney(new URL(window.location.href));
-        if (initialTarget && !completed) {
-          completeJourney(true);
-          completionFrame = requestAnimationFrame(() => initialTarget.scrollIntoView({ behavior: "instant", block: "start" }));
+          return () => {
+            cancelReleaseWait();
+            trigger?.kill(true);
+            sequence.kill();
+          };
         }
 
-        return () => {
-          cancelAnimationFrame(completionFrame);
-          document.removeEventListener("click", handleAnchor);
-          if (completed) section.setAttribute("data-journey-complete", "");
-          section.removeAttribute("data-journey-ready");
-          action.inert = false;
-        };
+        const activationStart = conditions?.mobile ? "top 68%" : "top 76%";
+        const triggers = steps.map((step, index) => ScrollTrigger.create({
+          trigger: step,
+          start: activationStart,
+          once: true,
+          onEnter: () => activateThrough(index),
+        }));
+
+        if (validatedSteps > 0) renderValidatedSteps(0);
+        return () => triggers.forEach((trigger) => trigger.kill());
       });
 
       return () => media.revert();

@@ -2,32 +2,62 @@
 import { homeConfig } from "../../config/home.config";
 import ResponsiveImage from "../ui/ResponsiveImage.astro";
 
-const { message, images, imagesNote } = homeConfig.editorial;
-const words = message.split(/\s+/);
+const { message, lines, images } = homeConfig.editorial;
 ---
 
 <section id="a-votre-ecoute" class="editorial" aria-labelledby="editorial-message" data-editorial>
   <div class="editorial-panel" data-editorial-panel>
     <h2 id="editorial-message" class="editorial-message" aria-label={message}>
-      <span aria-hidden="true">
-        {words.map((word, index) => (
-          <Fragment>
-            <span class="editorial-word" data-editorial-word data-motion>{word}</span>{index < words.length - 1 ? " " : ""}
-          </Fragment>
-        ))}
+      <span class="editorial-lines" aria-hidden="true">
+        {lines.map((line, lineIndex) => {
+          const lineWords = line.split(/\s+/);
+          return (
+            <span class="editorial-line">
+              {lineWords.map((word, wordIndex) => (
+                <Fragment>
+                  <span
+                    class="editorial-word"
+                    data-editorial-word
+                    data-editorial-lead={lineIndex === 0 && wordIndex === 0 ? "" : undefined}
+                    data-motion
+                  >{word}</span>{wordIndex < lineWords.length - 1 ? " " : ""}
+                </Fragment>
+              ))}
+            </span>
+          );
+        })}
       </span>
     </h2>
     <figure class="editorial-gallery">
       <div class="editorial-images">
-        {images.map((image) => (
-          <div class="editorial-circle">
+        {images.map((image) => image.kind === "mosaic" ? (
+          <div class="editorial-mosaic" role="group" aria-label={image.label}>
+            {image.items.map((item) => (
+              <div class="editorial-mini-circle">
+                <ResponsiveImage
+                  src={item.src}
+                  alt={item.alt}
+                  width={item.src.width}
+                  height={item.src.height}
+                  widths={[120, 180, 240, 320, 480]}
+                  sizes="(min-width: 2048px) 215px, (min-width: 768px) 11vw, 21vw"
+                  formats={["webp"]}
+                  fallbackFormat="webp"
+                  quality={84}
+                  class="w-full"
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div class:list={["editorial-circle", { "editorial-circle--show-left-edge": image === images[1] }]}>
             <ResponsiveImage
               src={image.src}
               alt={image.alt}
               width={image.src.width}
               height={image.src.height}
               widths={[180, 320, 480, 640, 800]}
-              sizes="(min-width: 1440px) 310px, (min-width: 768px) 22vw, 42vw"
+              sizes="(min-width: 2048px) 450px, (min-width: 768px) 23vw, 45vw"
               formats={["webp"]}
               fallbackFormat="webp"
               quality={85}
@@ -36,52 +66,55 @@ const words = message.split(/\s+/);
           </div>
         ))}
       </div>
-      <figcaption class="mt-4 text-center text-xs text-[var(--color-text-secondary)]">{imagesNote}</figcaption>
     </figure>
   </div>
 </section>
 
 <style>
-  .editorial { position: relative; }
+  .editorial { position: relative; margin-block: var(--section-gap); }
   .editorial-panel {
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: clamp(2rem, 4vw, 3.75rem);
-    align-items: center;
-    padding: clamp(3rem, 6vh, 5rem) clamp(1.25rem, 4vw, 4.75rem);
+    align-items: stretch;
   }
   .editorial-message {
-    width: 100%;
-    max-width: 78rem;
-    margin-inline: auto;
+    width: calc(100% - (var(--content-axis) * 2));
+    max-width: 72rem;
+    margin-inline: var(--content-axis) auto;
     color: var(--color-text);
     font-family: var(--font-primary);
     font-size: var(--font-size-editorial);
     font-weight: 400;
-    line-height: 1.15;
+    line-height: 1.06;
     letter-spacing: -0.045em;
-    text-wrap: pretty;
+    text-wrap: balance;
   }
+  .editorial-lines, .editorial-line { display: block; }
   .editorial-word { display: inline-block; }
   .editorial-gallery { width: 100%; margin: 0; }
   .editorial-images { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(0.75rem, 1.2vw, 1.25rem); }
   .editorial-circle { aspect-ratio: 1; overflow: hidden; border-radius: var(--radius-pill); background: var(--color-surface); }
+  .editorial-mosaic {
+    aspect-ratio: 1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.4rem, 0.8vw, 0.8rem);
+  }
+  .editorial-mini-circle { aspect-ratio: 1; overflow: hidden; border-radius: var(--radius-pill); background: var(--color-surface); }
   .editorial-circle :global(img) { width: 100%; height: 100%; object-fit: cover; }
   .editorial-circle :global(picture) { display: block; height: 100%; }
+  .editorial-circle--show-left-edge :global(img) { object-position: left center; }
+  .editorial-mini-circle :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .editorial-mini-circle :global(picture) { display: block; height: 100%; }
 
   @media (min-width: 48rem) {
     .editorial-images { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   }
-  @media (min-width: 64rem) and (min-height: 50rem) {
-    .editorial-panel { min-height: 100svh; }
-    .editorial-message { font-size: min(var(--font-size-editorial), 7svh); }
-  }
 
-  /* Le texte reste lisible sans JS. L'espace de scroll n'existe qu'après initialisation. */
-  @media (prefers-reduced-motion: no-preference) {
-    .editorial[data-editorial-ready] { min-height: calc(100svh + var(--editorial-scroll-space)); }
-    .editorial[data-editorial-ready] .editorial-panel { position: sticky; top: 0; }
+  @media (min-width: 64rem) {
+    .editorial-line { white-space: nowrap; }
   }
 
   @media (prefers-reduced-motion: reduce), (forced-colors: active) {
@@ -96,32 +129,26 @@ const words = message.split(/\s+/);
   document.querySelectorAll<HTMLElement>("[data-editorial]").forEach((section) => {
     initMotion(`editorial-${section.id}`, ({ gsap, select }) => {
       const words = select<HTMLElement>("[data-editorial-word]");
-      const panel = section.querySelector<HTMLElement>("[data-editorial-panel]");
-      if (!panel || !words.length) return;
+      const message = section.querySelector<HTMLElement>("[data-editorial-panel] h2");
+      const leadWord = section.querySelector<HTMLElement>("[data-editorial-lead]");
+      if (!message || !leadWord || words.length < 2) return;
 
-      const media = gsap.matchMedia();
-      media.add({ pinned: "(min-width: 64rem) and (min-height: 50rem)", flowing: "(max-width: 63.999rem), (max-height: 49.999rem)" }, (context) => {
-        const pinned = Boolean(context.conditions?.pinned);
-        if (pinned) section.setAttribute("data-editorial-ready", "");
-        // Les opacités inline sont écrites uniquement par GSAP pour la progression liée au scroll.
-        gsap.set(words, { opacity: animationConfig.editorial.mutedOpacity });
-        gsap.to(words, {
-          opacity: 1,
-          duration: animationConfig.editorial.wordDuration,
-          stagger: animationConfig.editorial.wordStagger,
-          ease: "none",
-          scrollTrigger: {
-            trigger: pinned ? section : section.querySelector("h2"),
-            start: pinned ? "top top" : "top 85%",
-            end: () => pinned ? `+=${Math.max(1, section.offsetHeight - panel.offsetHeight)}` : "bottom 45%",
-            scrub: true,
-            invalidateOnRefresh: true,
-          },
-        });
-
-        return () => section.removeAttribute("data-editorial-ready");
+      const animatedWords = words.filter((word) => word !== leadWord);
+      gsap.set(animatedWords, { opacity: animationConfig.editorial.mutedOpacity });
+      gsap.set(leadWord, { opacity: 1 });
+      gsap.to(animatedWords, {
+        opacity: 1,
+        duration: animationConfig.editorial.wordDuration,
+        stagger: animationConfig.editorial.wordStagger,
+        ease: "none",
+        scrollTrigger: {
+          trigger: message,
+          start: "top 70%",
+          end: "bottom 30%",
+          scrub: true,
+          invalidateOnRefresh: true,
+        },
       });
-      return () => media.revert();
     }, { scope: section });
   });
 </script>

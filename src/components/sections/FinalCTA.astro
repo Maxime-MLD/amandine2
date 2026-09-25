@@ -15,8 +15,8 @@ import { contactConfig } from "../../config/contact.config";
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    margin-inline: clamp(0.5rem, 3vw, 3rem);
-    padding: clamp(3.5rem, 7vw, 6.5rem) clamp(1.5rem, 4vw, 4rem);
+    margin-inline: var(--section-inline-margin);
+    padding: clamp(3.5rem, 7vw, 6.5rem) var(--section-inline-padding);
     border-radius: var(--radius-xl);
     background: var(--gradient-final-cta);
   }

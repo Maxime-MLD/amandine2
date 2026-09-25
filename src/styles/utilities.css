@@ -50,10 +50,13 @@
   }
 
   .btn-primary {
+    max-width: 100%;
     min-height: 3.125rem;
+    padding-block: 0.875rem;
     padding-inline: clamp(1.5rem, 2vw, 2rem);
     border-radius: var(--radius-pill);
     font-size: 0.875rem;
+    overflow-wrap: anywhere;
   }
 
   .btn-circle {

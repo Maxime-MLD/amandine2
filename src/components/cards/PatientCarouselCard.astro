@@ -9,7 +9,7 @@ const { photos, carousel } = careOverview;
     <ManualCarousel id="patient-carousel" label={photos.label} count={photos.items.length} labels={carousel.photos} variant="photos">
       {photos.items.map((photo, index) => (
         <figure class="patient-slide" role="group" aria-label={`${index + 1} / ${photos.items.length}`} data-carousel-label={photo.title}>
-          <ResponsiveImage src={photo.src} alt={photo.alt} widths={[320, 480, 640]} sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" formats={["webp"]} fallbackFormat="webp" quality={85} width={photo.src.width} height={photo.src.height} pictureClass="contents" class="absolute inset-0 h-full! w-full object-cover object-center" />
+          <ResponsiveImage src={photo.src} alt={photo.alt} widths={[320, 480, 640, 960]} sizes="(min-width: 2048px) 487px, (min-width: 1280px) 25vw, (min-width: 600px) 50vw, 100vw" formats={["webp"]} fallbackFormat="webp" quality={85} width={photo.src.width} height={photo.src.height} pictureClass="contents" class="absolute inset-0 h-full! w-full object-contain object-center" />
           <figcaption class="patient-caption">
             <p class="text-[1.625rem] leading-tight tracking-[-0.035em]">{photo.title}</p>
             <p class="mt-1 text-[0.625rem]">{photos.illustration}</p>

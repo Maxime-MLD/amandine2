@@ -2,8 +2,8 @@
   color-scheme: light;
 
   /* Colors */
-  --color-page: #f1f1f1;
-  --color-frame: #f9f9f9;
+  --color-page: #f9f9f9;
+  --color-frame: var(--color-page);
   --color-surface: #ffffff;
   --color-text: #161b21;
   --color-text-secondary: #73777c;
@@ -23,6 +23,10 @@
   --color-journey-orange: #f9dfc5;
   --color-journey-coral: #f4d8d2;
   --color-journey-rose: #efd4e3;
+  --journey-inactive: #f4f4f4;
+  --journey-card-border: rgb(20 25 30 / 0.045);
+  --journey-progress-track: rgb(20 25 30 / 0.1);
+  --journey-card-shadow-active: 0 20px 50px rgb(19 27 36 / 0.05);
   --color-care-orange: #ffe0b5;
   --color-care-icon: #a65170;
   --color-care-bubble: rgb(255 255 255 / 0.26);
@@ -34,6 +38,25 @@
   --gradient-contact-section: linear-gradient(135deg, var(--color-blue-soft), var(--color-lilac-soft) 45%, var(--color-journey-lilac));
   --gradient-journey-appointment: linear-gradient(160deg, var(--color-blue-soft), var(--color-journey-lilac) 22%, var(--color-peach-soft) 78%, var(--color-care-orange));
   --gradient-journey-care: linear-gradient(120deg, var(--color-journey-orange) 5%, var(--color-journey-coral) 48%, var(--color-journey-rose) 100%);
+  --journey-gradient-01: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-blue-soft) 80%, var(--color-surface)),
+    color-mix(in srgb, var(--color-journey-lilac) 76%, var(--color-surface))
+  );
+  --journey-gradient-02: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--color-blue-soft) 80%, var(--color-surface)),
+    color-mix(in srgb, var(--color-journey-lilac) 76%, var(--color-surface)) 24%,
+    color-mix(in srgb, var(--color-peach-soft) 78%, var(--color-surface)) 78%,
+    color-mix(in srgb, var(--color-care-orange) 72%, var(--color-surface))
+  );
+  --journey-gradient-03: linear-gradient(
+    120deg,
+    color-mix(in srgb, var(--color-journey-orange) 76%, var(--color-surface)) 5%,
+    color-mix(in srgb, var(--color-journey-coral) 78%, var(--color-surface)) 48%,
+    color-mix(in srgb, var(--color-journey-rose) 76%, var(--color-surface)) 100%
+  );
+  --journey-progress-gradient: linear-gradient(90deg, var(--color-blue-soft), var(--color-journey-lilac) 38%, var(--color-peach-soft) 70%, var(--color-journey-rose));
   --gradient-contact: radial-gradient(ellipse at 0% 0%, var(--color-pink-soft), transparent 57%), radial-gradient(ellipse at 100% 100%, var(--color-blue-soft), var(--color-lilac-soft) 12%, transparent 55%);
   --gradient-photo-caption: linear-gradient(0deg, var(--color-photo-shade), var(--color-photo-clear));
   --gradient-final-cta: linear-gradient(25deg, var(--color-peach-soft), var(--color-pink-soft) 38%, var(--color-lilac-soft) 64%, var(--color-blue-soft));
@@ -66,18 +89,26 @@
   --radius-pill: 9999px;
 
   /* Layout */
-  --container: 90rem;
-  --page-padding: clamp(1rem, 2.2vw, 2rem);
+  --container: 128rem;
+  --page-padding: clamp(1rem, 2vw, 2rem);
+  --frame-space: clamp(1rem, 1.5vw, 1.5rem);
+  --section-inline-margin: 0rem;
+  --section-inline-padding: clamp(1.25rem, 3vw, 3rem);
+  --content-axis: clamp(1.25rem, 4vw, 4.75rem);
+  --content-copy-column: 25rem;
+  --content-main-column: 48rem;
+  --content-column-gap: clamp(2rem, 4vw, 4rem);
+  --navbar-height: 5.25rem;
   --section-space: clamp(6rem, 10vw, 11.25rem);
+  --section-gap: clamp(4rem, 8vw, 8rem);
 
   /* Typography */
-  --font-primary: "Satoshi", "General Sans", "Inter", Arial, sans-serif;
+  --font-primary: "DM Sans", Arial, sans-serif;
   --font-size-hero: clamp(3.25rem, 6vw, 6rem);
-  --font-size-editorial: clamp(1.875rem, 4.9vw, 4.5rem);
-  --editorial-scroll-space: 80svh;
-  --journey-scroll-space: 240svh;
+  --font-size-editorial: clamp(2.5rem, 4.2vw, 3.875rem);
   --font-size-section: clamp(2.625rem, 5vw, 4.75rem);
   --font-size-h3: clamp(1.5rem, 1.2rem + 1vw, 2.25rem);
+  --font-size-card-title: clamp(2rem, 2.1vw, 2.125rem);
   --font-size-lead: clamp(1.125rem, 1.5vw, 1.375rem);
   --font-size-body: clamp(1rem, 0.975rem + 0.125vw, 1.0625rem);
   --font-size-small: clamp(0.8125rem, 0.7875rem + 0.125vw, 0.875rem);
@@ -114,6 +145,12 @@
   --font-size-h2: var(--font-size-section);
   --font-size-body-lg: var(--font-size-lead);
   --line-height-heading: 1;
+}
+
+@media (min-width: 64rem) {
+  :root {
+    --navbar-height: 5.5rem;
+  }
 }
 
 @media (width < 48rem) {

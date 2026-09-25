@@ -1,6 +1,7 @@
-/*
- * Déclarer ici uniquement les fichiers locaux licenciés, idéalement au format
- * WOFF2 variable ou avec peu de graisses. Utiliser font-display: swap, puis
- * mettre à jour les familles dans tokens.css. L'exemple complet est conservé
- * dans le README afin que ce fichier de production reste contrôlable.
- */
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 100 1000;
+  font-display: swap;
+  src: url("../assets/fonts/dm-sans-latin-variable.woff2") format("woff2");
+}

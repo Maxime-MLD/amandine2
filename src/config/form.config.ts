@@ -9,6 +9,7 @@ export interface ContactFormConfig {
     lastName: FormFieldConfig;
     phone: FormFieldConfig;
     email: FormFieldConfig;
+    careLocation: FormFieldConfig;
     service: FormFieldConfig;
     message: FormFieldConfig;
     consent: FormFieldConfig;
@@ -20,6 +21,7 @@ export interface ContactFormConfig {
     lastName: string;
     phone: string;
     email: string;
+    careLocation: string;
     service: string;
     servicePlaceholder: string;
     otherService: string;
@@ -31,6 +33,10 @@ export interface ContactFormConfig {
     requiredHint: string;
     sensitiveDataHint: string;
   };
+  careLocations: ReadonlyArray<{
+    value: string;
+    label: string;
+  }>;
   messages: {
     validation: string;
     captcha: string;
@@ -47,6 +53,7 @@ export const contactFormConfig = {
     lastName: { enabled: true, required: true },
     phone: { enabled: true, required: true },
     email: { enabled: true, required: false },
+    careLocation: { enabled: true, required: true },
     service: { enabled: false, required: false },
     message: { enabled: true, required: true },
     consent: { enabled: true, required: true },
@@ -58,6 +65,7 @@ export const contactFormConfig = {
     lastName: "Nom complet",
     phone: "Téléphone",
     email: "E-mail",
+    careLocation: "Lieu des soins",
     service: "Service ou type de demande",
     servicePlaceholder: "Sélectionnez une option",
     otherService: "Autre demande",
@@ -69,6 +77,11 @@ export const contactFormConfig = {
     requiredHint: "Les champs marqués d’un astérisque sont obligatoires.",
     sensitiveDataHint: "Merci de ne pas transmettre d’informations médicales sensibles dans ce message.",
   },
+  careLocations: [
+    { value: "home", label: "À domicile" },
+    { value: "office", label: "Au cabinet" },
+    { value: "undecided", label: "Je ne sais pas encore" },
+  ],
   messages: {
     validation: "Vérifiez les champs signalés avant de continuer.",
     captcha: "Veuillez confirmer que vous n’êtes pas un robot.",

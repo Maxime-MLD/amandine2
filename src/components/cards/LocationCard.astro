@@ -2,14 +2,14 @@
 import { careOverview } from "../../data/careOverview";
 const { location } = careOverview;
 ---
-<article class="flex min-h-[23rem] min-w-0 flex-col rounded-[var(--radius-lg)] bg-[var(--color-surface)] p-6 lg:p-5 xl:p-7">
+<article class="flex min-h-[23rem] min-w-0 flex-col rounded-[var(--radius-lg)] bg-[var(--color-surface)] px-5 py-6 xl:px-6 xl:py-7">
   <div class="flex items-start justify-between gap-2">
-    <h2 class="max-w-[11rem] text-[1.625rem] leading-[1.1] font-normal tracking-[-0.04em] xl:text-[1.875rem]">{location.title}</h2>
+    <h2 class="min-w-0 flex-1 text-[length:var(--font-size-card-title)] leading-[1.1] font-normal tracking-[-0.04em]">{location.title}</h2>
     <a href={location.mapHref} target="_blank" rel="noopener noreferrer" aria-label={location.mapLabel} class="focus-ring inline-flex size-11 shrink-0 items-center justify-center rounded-full bg-[var(--color-page)]">
       <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10" /></svg>
     </a>
   </div>
-  <div class="mt-auto pt-8 text-sm leading-[1.6]">
+  <div class="mt-auto w-full pt-8 text-sm leading-[1.6]">
     <p class="text-[var(--color-text-secondary)]">{location.intro}</p>
     <address class="mt-2 font-medium not-italic">
       {location.street}<br />{location.city}

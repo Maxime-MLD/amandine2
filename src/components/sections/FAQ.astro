@@ -6,11 +6,11 @@ import FaqItem from "../ui/FaqItem.astro";
 <section id="faq" class="faq-section" aria-labelledby="faq-title">
   <header>
     <h2 id="faq-title" class="font-normal">{faqSection.title}<br />{faqSection.titleSecondLine}</h2>
-    <p class="mt-5 max-w-[17rem] text-sm leading-relaxed text-[var(--color-text-secondary)] sm:text-base">
+    <p class="faq-description mt-5 leading-relaxed text-[var(--color-text-secondary)]">
       {faqSection.description}
     </p>
   </header>
-  <div class="min-w-0">
+  <div class="faq-items min-w-0">
     {faqItems.map((item) => <FaqItem item={item} />)}
   </div>
 </section>
@@ -19,14 +19,24 @@ import FaqItem from "../ui/FaqItem.astro";
   .faq-section {
     display: grid;
     gap: 2.5rem;
-    padding: clamp(1rem, 2vw, 2rem) clamp(1.25rem, 6vw, 6rem) clamp(5rem, 10vw, 9rem);
+    margin-bottom: var(--section-gap);
+    padding-inline: var(--content-axis);
   }
   h2 {
     font-size: clamp(2.5rem, 4.2vw, 3.875rem);
     line-height: 1.05;
     letter-spacing: -0.045em;
   }
+  header { min-width: 0; container-type: inline-size; }
+  .faq-description { font-size: min(1rem, 4.6cqi); white-space: nowrap; }
   @media (min-width: 64rem) {
-    .faq-section { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr); gap: clamp(3rem, 6vw, 6rem); }
+    .faq-section {
+      grid-template-columns: minmax(0, var(--content-copy-column)) minmax(0, 1fr);
+      gap: clamp(4.5rem, 6vw, 7rem);
+    }
+    .faq-items {
+      width: min(100%, var(--content-main-column));
+      justify-self: center;
+    }
   }
 </style>

@@ -18,13 +18,14 @@ const { about } = homeConfig;
           src={about.image.src}
           alt={about.image.alt}
           widths={[360, 540, 720, 960]}
-          sizes="(min-width: 1440px) 480px, (min-width: 768px) 40vw, 85vw"
+          sizes="(min-width: 2048px) 760px, (min-width: 768px) 40vw, 85vw"
           formats={["webp"]}
           fallbackFormat="webp"
           width={about.image.src.width}
           height={about.image.src.height}
           quality={85}
-          class="w-full"
+          pictureClass="about-picture"
+          class="h-full! w-full object-contain object-bottom"
         />
       </div>
     </div>
@@ -32,22 +33,33 @@ const { about } = homeConfig;
     <div class="about-copy min-w-0">
       <h2 id="about-title" class="font-normal">{about.title}</h2>
       <p class="mt-6 text-lg leading-snug text-[var(--color-text-secondary)] md:text-xl xl:text-2xl">{about.subtitle}</p>
-      <p class="mt-2 max-w-[22rem] text-sm leading-relaxed text-[var(--color-text-secondary)] md:text-base">{about.location}</p>
+      <p class="about-description mt-4 max-w-[30rem] leading-relaxed text-[var(--color-text-secondary)]">
+        {about.description.map((part) => "emphasis" in part && part.emphasis
+          ? <span class="about-description-emphasis">{part.text}</span>
+          : part.text)}
+      </p>
     </div>
   </div>
 </section>
 
 <style>
   .about-section {
-    padding: 0 clamp(0.5rem, 3vw, 3rem) clamp(4rem, 8vw, 8rem);
+    margin-inline: var(--section-inline-margin);
+    /* Même respiration entre les sections, à l'intérieur du cadre blanc continu. */
+    padding-bottom: var(--section-gap);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    background: var(--color-surface);
   }
 
   .about-card {
     display: grid;
+    width: 100%;
+    max-width: 72rem;
     gap: 2rem;
     overflow: hidden;
-    padding: 1.25rem 1.25rem 2.5rem;
-    border-radius: var(--radius-xl);
+    margin-inline: auto;
+    padding: 1.25rem var(--section-inline-padding) 2.5rem;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
     background: var(--color-surface);
   }
 
@@ -58,16 +70,27 @@ const { about } = homeConfig;
     height: clamp(20rem, 75vw, 30rem);
     overflow: hidden;
     border-radius: var(--radius-lg);
-    background: var(--gradient-hero);
+    width: 100%;
+    max-width: 26rem;
+    justify-self: center;
+    background: linear-gradient(
+      180deg,
+      var(--color-blue-soft),
+      var(--color-lilac-soft) 40%,
+      var(--color-pink-soft) 74%,
+      var(--color-peach-soft)
+    );
   }
 
   .about-portrait {
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 31rem;
+    height: calc(100% - 1.75rem);
     margin: 1.75rem auto 0;
   }
+
+  .about-portrait :global(.about-picture) { display: block; height: 100%; }
 
   .about-lights { position: absolute; inset: 0; pointer-events: none; }
   .light {
@@ -77,23 +100,34 @@ const { about } = homeConfig;
     border-radius: var(--radius-pill);
     background: var(--color-hero-orb);
   }
-  .light-top { width: 48%; top: 5%; right: -12%; }
-  .light-left { width: 38%; top: 48%; left: -10%; }
-  .light-bottom { width: 85%; right: -15%; bottom: -28%; }
+  .light-top { width: 42%; top: 10%; left: 8%; }
+  .light-left { width: 58%; top: 43%; left: -24%; }
+  .light-bottom { width: 76%; right: -22%; bottom: -32%; }
 
-  .about-copy { align-self: center; padding-inline: 0.25rem; }
+  .about-copy {
+    width: min(100%, 32rem);
+    align-self: center;
+    justify-self: center;
+    padding-inline: 0.25rem;
+    container-type: inline-size;
+  }
+  .about-description { font-size: clamp(1.0625rem, 1.2vw, 1.25rem); }
+  .about-description-emphasis {
+    color: color-mix(in srgb, var(--color-text) 78%, var(--color-text-secondary));
+  }
   .about-copy h2 {
-    max-width: 8ch;
-    font-size: clamp(2.5rem, 5vw, 4.75rem);
+    font-size: clamp(1.5rem, 10.8cqi, 3rem);
+    white-space: nowrap;
     line-height: 1.02;
     letter-spacing: -0.045em;
   }
 
   @media (min-width: 48rem) {
+    .about-copy h2 { font-size: clamp(1.5rem, 10.8cqi, 4.75rem); }
     .about-card {
-      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr);
+      grid-template-columns: minmax(16rem, 26rem) minmax(0, 1fr);
       gap: clamp(2rem, 5vw, 5rem);
-      padding: clamp(3rem, 5vw, 5rem) clamp(2rem, 5vw, 5rem);
+      padding-block: clamp(3rem, 5vw, 5rem);
     }
     .about-visual {
       height: clamp(25rem, 40vw, 34rem);

@@ -20,6 +20,17 @@ export function registerGsap(): boolean {
     }
 
     pluginsRegistered = true;
+
+    // Les images différées et la police locale peuvent déplacer les repères de scroll.
+    let refreshFrame = 0;
+    const refreshLayout = () => {
+      cancelAnimationFrame(refreshFrame);
+      refreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh());
+    };
+    document.fonts.ready.then(refreshLayout);
+    document.addEventListener("load", (event) => {
+      if (event.target instanceof HTMLImageElement) refreshLayout();
+    }, true);
   }
 
   return true;

@@ -24,7 +24,7 @@ const messages = contactFormConfig.messages;
 
 <form
   id={id}
-  class:list={["min-w-0 space-y-4", className]}
+  class:list={["min-w-0 space-y-5", className]}
   action={isConfigured ? "https://api.web3forms.com/submit" : undefined}
   method="POST"
   data-contact-form
@@ -54,7 +54,7 @@ const messages = contactFormConfig.messages;
     />
   </div>
 
-  <div class="grid min-w-0 gap-4 md:grid-cols-2">
+  <div class="contact-fields grid min-w-0 gap-5">
     {
       fields.firstName.enabled && (
         <FormField
@@ -104,8 +104,40 @@ const messages = contactFormConfig.messages;
           autocomplete="email"
           required={fields.email.required}
           maxlength={254}
-          class={!fields.firstName.enabled ? "md:col-span-2" : undefined}
         />
+      )
+    }
+    {
+      fields.careLocation.enabled && (
+        <div class="min-w-0" data-form-field>
+          <label class="safe-wrap block text-sm font-normal" for={`${id}-care-location`}>
+            {labels.careLocation}
+            {fields.careLocation.required && <span aria-hidden="true"> *</span>}
+          </label>
+          <div class="care-location-control mt-2">
+            <select
+              id={`${id}-care-location`}
+              name="care_location"
+              required={fields.careLocation.required}
+              aria-describedby={`${id}-care-location-error`}
+              class="care-location-select focus-ring w-full min-w-0 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-frame)] px-4 py-3 disabled:cursor-not-allowed disabled:opacity-60"
+              data-form-control
+            >
+              {contactFormConfig.careLocations.map((location, index) => (
+                <option value={location.value} selected={index === 0}>{location.label}</option>
+              ))}
+            </select>
+            <svg class="care-location-arrow" viewBox="0 0 20 20" aria-hidden="true">
+              <path d="m6 8 4 4 4-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" />
+            </svg>
+          </div>
+          <p
+            id={`${id}-care-location-error`}
+            class="mt-2 text-small font-semibold text-[var(--color-text)]"
+            data-field-error
+            hidden
+          ></p>
+        </div>
       )
     }
   </div>
@@ -145,7 +177,7 @@ const messages = contactFormConfig.messages;
         id={`${id}-message`}
         name="message"
         label={labels.message}
-        rows={4}
+        rows={5}
         helpText={labels.sensitiveDataHint}
         required={fields.message.required}
         minlength={10}
@@ -196,6 +228,32 @@ const messages = contactFormConfig.messages;
 </form>
 
 <style>
+  form { container-type: inline-size; }
+  /* Les colonnes dépendent de la place réelle dans la carte, pas du viewport. */
+  @container (min-width: 28rem) {
+    .contact-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .contact-fields :global(.contact-field-wide) { grid-column: 1 / -1; }
+  }
+  .care-location-control { position: relative; }
+  .care-location-select {
+    height: calc(1.6em + 1.5rem + 2px);
+    padding-right: 3rem;
+    appearance: none;
+    color: var(--color-text);
+    opacity: 1;
+  }
+  .care-location-arrow {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    width: 1.125rem;
+    height: 1.125rem;
+    color: var(--color-text-secondary);
+    pointer-events: none;
+    transform: translateY(-50%);
+  }
+  .care-location-select option { color: var(--color-text-secondary); }
+  .care-location-select option:checked { color: var(--color-text); }
   /* Garder le rendu noir de la maquette sans activer un envoi non configuré. */
   .contact-submit:disabled { opacity: 1; background: var(--color-dark); }
 </style>

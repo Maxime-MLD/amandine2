@@ -85,17 +85,9 @@ const {
 
 <style>
   .site-frame {
-    width: calc(100% - var(--page-padding) * 2);
+    width: 100%;
     max-width: var(--container);
-    margin: var(--page-padding) auto;
-    padding: 0 0.5rem 0.5rem;
-    border-radius: var(--radius-xl);
-    background: var(--color-frame);
-  }
-
-  @media (min-width: 64rem) {
-    .site-frame {
-      margin-block: clamp(2rem, 4vw, 4rem);
-    }
+    margin: var(--frame-space) auto;
+    padding-inline: var(--page-padding);
   }
 </style>
