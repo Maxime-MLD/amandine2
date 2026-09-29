@@ -8,7 +8,7 @@ export interface Props {
 }
 
 const {
-  title = "TODO_TRUST_BAR_TITLE",
+  title = "Informations pratiques",
   items = [],
 } = Astro.props as Props;
 
@@ -22,7 +22,6 @@ const hasItems = items.length > 0;
   aria-labelledby="trust-title"
 >
   <Container>
-    <!-- TODO_TRUST_BAR: renseigner uniquement des preuves de confiance vérifiables. -->
     <h2 id="trust-title" class="sr-only">{title}</h2>
     {
       hasItems && (

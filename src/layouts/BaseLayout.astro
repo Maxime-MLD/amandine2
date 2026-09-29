@@ -29,7 +29,7 @@ const {
   type,
   breadcrumbs,
   navbarVariant = "default",
-  navbarSticky = false,
+  navbarSticky = true,
   navbarHideOnScroll = false,
   bodyClass,
   framed = false,
@@ -86,8 +86,36 @@ const {
 <style>
   .site-frame {
     width: 100%;
-    max-width: var(--container);
+    max-width: var(--container-max);
     margin: var(--frame-space) auto;
-    padding-inline: var(--page-padding);
+    padding-inline: var(--container-padding);
+  }
+
+  :global(main#main-content section[id]) {
+    scroll-margin-top: calc(var(--navbar-height) + 1rem);
   }
 </style>
+
+<script>
+  const restoreInitialAnchor = (): void => {
+    if (!window.location.hash) return;
+
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    const target = document.getElementById(id);
+    if (!target) return;
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", restoreInitialAnchor, { once: true });
+  } else {
+    restoreInitialAnchor();
+  }
+
+  if (document.readyState !== "complete") {
+    window.addEventListener("load", restoreInitialAnchor, { once: true });
+  }
+</script>

@@ -13,20 +13,4 @@ export interface ProjectItem {
   featured: boolean;
 }
 
-export const projects = [
-  {
-    id: "TODO_PROJECT_ID",
-    title: "TODO_PROJECT_TITLE",
-    category: "TODO_PROJECT_CATEGORY",
-    summary: "TODO_PROJECT_SUMMARY",
-    location: "TODO_PROJECT_LOCATION",
-    year: "TODO_PROJECT_YEAR",
-    image: {
-      src: "TODO_PROJECT_IMAGE_IMPORT",
-      alt: "TODO_PROJECT_IMAGE_ALT",
-      decorative: false,
-    },
-    href: "/TODO_PROJECT_PATH",
-    featured: false,
-  },
-] as const satisfies readonly ProjectItem[];
+export const projects: readonly ProjectItem[] = [];

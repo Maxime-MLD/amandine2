@@ -1,12 +1,13 @@
 import nursePortrait from "../assets/images/amandine-portrait.webp";
 import cabinetEspaceGuyGontier from "../assets/images/editorial/cabinet-espace-guy-gontier.webp";
-import editorialCareEquipment from "../assets/images/editorial/editorial-care-equipment.png";
-import editorialHomeCareCar from "../assets/images/editorial/editorial-home-care-car.png";
-import editorialNurseNotes from "../assets/images/editorial/editorial-nurse-notes.png";
-import editorialPillOrganizer from "../assets/images/editorial/editorial-pill-organizer.png";
-import storyWheelchair from "../assets/images/editorial/story-wheelchair.png";
-import storyTension from "../assets/images/editorial/story-tension.png";
+import editorialCareEquipment from "../assets/images/editorial/editorial-care-equipment-v2.webp";
+import editorialCareNotes from "../assets/images/editorial/editorial-care-notes-v2.webp";
+import editorialHomeVisit from "../assets/images/editorial/editorial-home-visit.webp";
+import editorialHumanSupport from "../assets/images/editorial/editorial-human-support.webp";
+import editorialPillOrganizer from "../assets/images/editorial/editorial-pill-organizer-v2.webp";
+import storyTension from "../assets/images/editorial/story-tension.webp";
 import { businessConfig } from "./business.config";
+import { seoConfig } from "./seo.config";
 
 const editorialLines = [
   "Besoin de soins à domicile ?",
@@ -31,9 +32,8 @@ export const homeConfig = {
       { text: "." },
     ],
     image: {
-      // TODO_REPLACE_ABOUT_PORTRAIT: illustration provisoire, pas un portrait d’Amandine.
       src: nursePortrait,
-      alt: "Illustration d’une infirmière souriante en tenue blanche, sur un fond pastel.",
+      alt: "Amandine Gauthier, infirmière à Montagny.",
     },
   },
   editorial: {
@@ -42,8 +42,8 @@ export const homeConfig = {
     images: [
       {
         kind: "single",
-        src: storyWheelchair,
-        alt: "Portrait d’illustration d’un homme âgé souriant, assis dans un fauteuil roulant.",
+        src: editorialHumanSupport,
+        alt: "Une infirmière tient avec douceur la main d’une personne âgée.",
       },
       {
         kind: "single",
@@ -52,36 +52,36 @@ export const homeConfig = {
       },
       {
         kind: "mosaic",
-        label: "Le quotidien d’une infirmière à domicile",
+        label: "Les gestes du quotidien d’une infirmière à domicile",
         items: [
           {
             src: editorialPillOrganizer,
-            alt: "Pilulier hebdomadaire préparé pour organiser un traitement.",
+            alt: "Pilulier hebdomadaire préparé avec soin.",
           },
           {
-            src: editorialNurseNotes,
-            alt: "Infirmière en blouse blanche écrivant dans son carnet, visage hors champ.",
+            src: editorialCareNotes,
+            alt: "Infirmière en blouse blanche préparant les soins dans un carnet.",
           },
           {
             src: editorialCareEquipment,
-            alt: "Matériel de soins à domicile disposé autour d’un sac médical.",
+            alt: "Sac de soins et tensiomètre préparés pour une intervention à domicile.",
           },
           {
-            src: editorialHomeCareCar,
-            alt: "Voiture blanche utilisée pour les déplacements de soins à domicile.",
+            src: editorialHomeVisit,
+            alt: "Infirmière portant son sac de soins à l’entrée d’un domicile.",
           },
         ],
       },
       {
         kind: "single",
         src: storyTension,
-        alt: "Portrait d’illustration d’un homme souriant, avec un brassard de tension au bras.",
+        alt: "Homme souriant avec un brassard de tension au bras.",
       },
     ],
   },
   seo: {
-    title: "Infirmière à domicile à Montagny",
-    description: businessConfig.shortDescription,
+    title: seoConfig.defaultTitle,
+    description: seoConfig.defaultDescription,
   },
   hero: {
     badge: "À vos côtés, 24h/24 et 7j/7",
@@ -90,9 +90,8 @@ export const homeConfig = {
       "Des soins adaptés à vos besoins, à domicile ou au cabinet sur rendez-vous. Une présence attentive, au plus près de vous.",
     location: `${businessConfig.serviceArea.primaryArea} et ${businessConfig.serviceArea.radius.value} km alentour`,
     image: {
-      // TODO_REPLACE_NURSE_PORTRAIT: modèle généré, à remplacer par une photo autorisée d’Amandine.
       src: nursePortrait,
-      alt: "Illustration générée d’une infirmière souriante en tenue blanche, avec un stéthoscope.",
+      alt: "Amandine Gauthier, infirmière à Montagny.",
     },
   },
 } as const;

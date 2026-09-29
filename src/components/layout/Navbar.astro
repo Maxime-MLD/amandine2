@@ -30,8 +30,9 @@ const { appointment } = navigationConfig;
 ---
 
 <header
-  class:list={["relative z-50 w-full rounded-t-[var(--radius-xl)]", sticky && "sticky top-0", variantClasses[variant], className]}
+  class:list={["site-navbar z-50 w-full", sticky ? "sticky top-0" : "relative", variantClasses[variant], className]}
   data-navbar
+  data-navbar-sticky={sticky ? "true" : "false"}
   data-navbar-variant={variant}
   data-hide-on-scroll={hideOnScroll ? "true" : "false"}
 >
@@ -68,7 +69,67 @@ const { appointment } = navigationConfig;
   </div>
 </header>
 
+<script>
+  document.querySelectorAll<HTMLElement>('[data-navbar-sticky="true"]').forEach((navbar) => {
+    if (navbar.dataset.stickyInitialized === "true") return;
+
+    const scrolledThreshold = 96;
+    let frameRequested = false;
+
+    const updateScrolledState = () => {
+      navbar.classList.toggle("is-scrolled", window.scrollY > scrolledThreshold);
+      frameRequested = false;
+    };
+
+    const handleScroll = () => {
+      if (frameRequested) return;
+      frameRequested = true;
+      window.requestAnimationFrame(updateScrolledState);
+    };
+
+    updateScrolledState();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("pageshow", updateScrolledState);
+    navbar.dataset.stickyInitialized = "true";
+  });
+</script>
+
 <style>
+  .site-navbar {
+    isolation: isolate;
+    transition:
+      background-color 300ms ease-out,
+      border-color 300ms ease-out,
+      backdrop-filter 300ms ease-out,
+      -webkit-backdrop-filter 300ms ease-out;
+  }
+
+  .site-navbar::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    background-color: transparent;
+    content: "";
+    transition: background-color 300ms ease-out;
+    pointer-events: none;
+  }
+
+  .site-navbar.is-scrolled {
+    background-color: rgb(249 249 249 / 0.88);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+
+  .site-navbar.is-scrolled::after {
+    background-color: var(--color-border);
+  }
+
+  @supports not ((-webkit-backdrop-filter: blur(12px)) or (backdrop-filter: blur(12px))) {
+    .site-navbar.is-scrolled { background-color: rgb(249 249 249 / 0.97); }
+  }
+
   .navbar-inner {
     display: flex;
     min-height: var(--navbar-height);

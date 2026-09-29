@@ -10,14 +10,13 @@ export interface Props {
 }
 
 const {
-  title = "TODO_PROJECTS_SECTION_TITLE",
-  description = "TODO_PROJECTS_SECTION_DESCRIPTION",
+  title = "Projets",
+  description = "",
 } = Astro.props as Props;
 ---
 
 <Section id="projects" spacing="lg" width="full" aria-labelledby="projects-title">
   <Container>
-    <!-- TODO_PROJECTS_SECTION: remplacer les projets exemples par des réalisations réelles. -->
     <SectionHeader title={title} description={description} headingId="projects-title" />
 
     <ul class="mt-10 grid min-w-0 list-none gap-6 p-0 md:grid-cols-2 lg:grid-cols-3">

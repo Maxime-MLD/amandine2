@@ -1,6 +1,6 @@
 # Images éditoriales
 
-Générées avec l’outil imagegen intégré le 24 septembre 2026. Personnes fictives, pas de vrais patients. Le bâtiment est une illustration provisoire et ne représente pas le cabinet réel. TODO_REPLACE_CABINET_PHOTO avant publication.
+Générées avec l’outil imagegen intégré le 24 septembre 2026. Personnes fictives, pas de vrais patients. La photographie du cabinet utilisée par la section éditoriale a été fournie séparément.
 
 ## story-wheelchair.png
 
@@ -13,8 +13,4 @@ Use case: photorealistic-natural. Asset type: square editorial photograph for a 
 ## story-wellbeing.png
 
 Use case: photorealistic-natural. Asset type: square editorial photograph for a French nursing website, displayed in a circular crop. A smiling woman around 65 with a natural silver bob haircut, alone, sitting comfortably in a pale armchair. Warm authentic expression looking at camera, feeling listened to and reassured. Tight portrait head to waist centered for circular cropping, whole head with breathing room. Soft white out-of-focus wall behind her with minimal decor; a hint of pale chair only. Soft natural daylight, premium professional healthcare editorial photography, real skin texture and wrinkles, cream knit cardigan over pale peach top. Calm restrained neutral palette. No nurse, no other people, no text, no medical props, no watermark, no logo.
-
-## TODO_REPLACE_story-cabinet.png
-
-Use case: photorealistic-natural. Asset type: temporary illustrative square photo for a French nursing website, NOT a depiction of any real address or named medical practice. A modest welcoming small-town French medical-office entrance, light cream plaster facade, simple pale grey glass entrance door, soft neutral architecture, accessible level threshold. Tight facade framing, little street context, centered entrance for later circular CSS cropping. Realistic professional architectural photography, soft overcast daylight, restrained white and warm neutral colors, uncluttered surroundings slightly out of focus. No people, no text, no signs, no names, no street number, no logos, no watermark. Full square edge-to-edge photograph, do not bake in a circular mask or border.
 

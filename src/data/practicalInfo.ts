@@ -18,11 +18,10 @@ export interface PracticalInfoItem {
 
 export const practicalInfo = [
   {
-    id: "TODO_PRACTICAL_INFO_ID",
-    kind: "other",
-    title: "TODO_PRACTICAL_INFO_TITLE",
-    value: "TODO_PRACTICAL_INFO_VALUE",
-    description: "TODO_PRACTICAL_INFO_DESCRIPTION",
-    icon: "TODO_PRACTICAL_INFO_ICON",
+    id: "cabinet-sur-rendez-vous",
+    kind: "appointment",
+    title: "Soins au cabinet",
+    value: "Uniquement sur rendez-vous",
+    description: "39, rue de la République, 42840 Montagny.",
   },
 ] as const satisfies readonly PracticalInfoItem[];

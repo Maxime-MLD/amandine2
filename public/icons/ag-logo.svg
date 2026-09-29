@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">AG — Amandine Gauthier</title>
+  <desc id="desc">Initiales AG noires sur un dégradé pastel bleu-violet vers pêche.</desc>
+  <defs>
+    <linearGradient id="heroGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#D8DAFF"/>
+      <stop offset="46%" stop-color="#E8DFF1"/>
+      <stop offset="100%" stop-color="#F4D6D2"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#heroGradient)"/>
+  <text
+    x="512"
+    y="542"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    fill="#000000"
+    font-family="'DM Sans', Arial, sans-serif"
+    font-size="455"
+    font-weight="600"
+    letter-spacing="-28">AG</text>
+</svg>

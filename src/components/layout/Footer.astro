@@ -106,6 +106,14 @@ const currentYear = new Date().getFullYear();
     .footer-navigation { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .footer-bottom { flex-direction: row; justify-content: space-between; }
   }
+  @media (max-width: 63.999rem) {
+    .footer-signature {
+      width: fit-content;
+      align-self: center;
+      text-align: right;
+    }
+    .footer-signature span:last-child { margin-left: 0; }
+  }
   @media (min-width: 64rem) {
     .footer-main {
       grid-template-columns: repeat(4, minmax(9rem, 12rem));

@@ -9,12 +9,11 @@ export interface Props {
   title?: string;
 }
 
-const { title = "TODO_LOCAL_AREA_SECTION_TITLE" } = Astro.props as Props;
+const { title = "Zone d’intervention" } = Astro.props as Props;
 ---
 
 <Section id="local-area" spacing="lg" width="full" aria-labelledby="local-area-title">
   <Container>
-    <!-- TODO_LOCAL_AREA_SECTION: vérifier chaque zone et son contenu local avant publication. -->
     <SectionHeader
       title={title}
       description={businessConfig.serviceArea.primaryArea}

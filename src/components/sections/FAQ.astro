@@ -4,13 +4,13 @@ import FaqItem from "../ui/FaqItem.astro";
 ---
 
 <section id="faq" class="faq-section" aria-labelledby="faq-title">
-  <header>
-    <h2 id="faq-title" class="font-normal">{faqSection.title}<br />{faqSection.titleSecondLine}</h2>
-    <p class="faq-description mt-5 leading-relaxed text-[var(--color-text-secondary)]">
+  <header data-reveal="faq">
+    <h2 id="faq-title" class="section-title">{faqSection.title}<br />{faqSection.titleSecondLine}</h2>
+    <p class="faq-description section-description mt-[var(--space-title-copy)]">
       {faqSection.description}
     </p>
   </header>
-  <div class="faq-items min-w-0">
+  <div class="faq-items min-w-0" data-reveal="faq">
     {faqItems.map((item) => <FaqItem item={item} />)}
   </div>
 </section>
@@ -22,14 +22,16 @@ import FaqItem from "../ui/FaqItem.astro";
     margin-bottom: var(--section-gap);
     padding-inline: var(--content-axis);
   }
-  h2 {
-    font-size: clamp(2.5rem, 4.2vw, 3.875rem);
-    line-height: 1.05;
-    letter-spacing: -0.045em;
-  }
   header { min-width: 0; container-type: inline-size; }
-  .faq-description { font-size: min(1rem, 4.6cqi); white-space: nowrap; }
-  @media (min-width: 64rem) {
+  .faq-description { white-space: nowrap; }
+  @media (max-width: 26.8125rem) {
+    .faq-description {
+      width: calc(100% + var(--content-axis) - 0.5rem);
+      font-size: clamp(0.75rem, 3.4vw, var(--font-size-section-copy));
+      letter-spacing: -0.025em;
+    }
+  }
+  @media (min-width: 72rem) {
     .faq-section {
       grid-template-columns: minmax(0, var(--content-copy-column)) minmax(0, 1fr);
       gap: clamp(4.5rem, 6vw, 7rem);

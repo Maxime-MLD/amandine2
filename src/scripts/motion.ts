@@ -66,8 +66,9 @@ function resolveScope(scope?: MotionScope): Element | null {
 }
 
 function clearMotionStyles(scope: Element, gsap: GsapApi): void {
-  const descendants = Array.from(scope.querySelectorAll<HTMLElement>("[data-motion]"));
-  const targets = scope.matches("[data-motion]")
+  const motionSelector = "[data-motion], [data-reveal]";
+  const descendants = Array.from(scope.querySelectorAll<HTMLElement>(motionSelector));
+  const targets = scope.matches(motionSelector)
     ? [scope as HTMLElement, ...descendants]
     : descendants;
 

@@ -4,7 +4,7 @@ import { contactConfig } from "../../config/contact.config";
 
 <section class="final-cta" aria-labelledby="final-cta-title">
   <div class="cta-lights" aria-hidden="true"><span></span><span></span><span></span></div>
-  <div class="relative z-10 text-center">
+  <div class="relative z-10 text-center" data-reveal="final-cta">
     <h2 id="final-cta-title" class="font-normal">{contactConfig.banner.title}</h2>
     <a class="btn-primary focus-ring mt-8" href={contactConfig.banner.href}>{contactConfig.banner.label}</a>
   </div>
@@ -20,7 +20,7 @@ import { contactConfig } from "../../config/contact.config";
     border-radius: var(--radius-xl);
     background: var(--gradient-final-cta);
   }
-  h2 { font-size: clamp(2rem, 4.2vw, 3.875rem); letter-spacing: -0.045em; line-height: 1.12; }
+  h2 { font-size: clamp(2rem, 4.2vw, 3.875rem); letter-spacing: var(--tracking-heading); line-height: 1.12; }
   .cta-lights { position: absolute; inset: 0; pointer-events: none; }
   .cta-lights span {
     position: absolute;

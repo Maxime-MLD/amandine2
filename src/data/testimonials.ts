@@ -12,14 +12,4 @@ export interface TestimonialItem {
   sourceUrl?: string;
 }
 
-export const testimonials = [
-  {
-    id: "TODO_TESTIMONIAL_ID",
-    status: "placeholder",
-    quote: "TODO_TESTIMONIAL_QUOTE_NOT_PUBLISHED",
-    authorName: "TODO_TESTIMONIAL_AUTHOR",
-    authorRole: "TODO_TESTIMONIAL_AUTHOR_ROLE",
-    rating: "TODO_TESTIMONIAL_RATING",
-    sourceUrl: "TODO_TESTIMONIAL_SOURCE_URL",
-  },
-] as const satisfies readonly TestimonialItem[];
+export const testimonials: readonly TestimonialItem[] = [];

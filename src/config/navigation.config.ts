@@ -1,4 +1,6 @@
 
+import { businessConfig } from "./business.config";
+
 export interface NavigationItem {
   label: string;
   href: string;
@@ -11,6 +13,11 @@ export interface NavigationConfig {
   items: readonly NavigationItem[];
   legalItems: readonly NavigationItem[];
   appointment: { label: string; href: string; ariaLabel: string };
+  mobileMenu: {
+    eyebrow: string;
+    meta: string;
+    ctaArrow: string;
+  };
   labels: {
     primaryNavigation: string;
     mobileNavigation: string;
@@ -37,8 +44,20 @@ export const navigationConfig = {
     },
     {
       label: "Les soins",
-      href: "/services",
-      ariaLabel: "Découvrir les soins infirmiers",
+      href: "/#apercu-soins",
+      ariaLabel: "Découvrir un aperçu des soins infirmiers",
+      external: false,
+    },
+    {
+      label: "Zone d’intervention",
+      href: "/#zone-intervention",
+      ariaLabel: "Découvrir la zone d’intervention autour de Montagny",
+      external: false,
+    },
+    {
+      label: "Contact",
+      href: "/#contact",
+      ariaLabel: "Contacter Amandine Gauthier",
       external: false,
     },
   ],
@@ -46,6 +65,11 @@ export const navigationConfig = {
     label: "Prendre rendez-vous",
     href: "/#contact",
     ariaLabel: "Contacter Amandine Gauthier pour prendre rendez-vous",
+  },
+  mobileMenu: {
+    eyebrow: "Menu",
+    meta: `${businessConfig.serviceArea.primaryArea} · Soins à domicile & au cabinet`,
+    ctaArrow: "→",
   },
   legalItems: [
     {

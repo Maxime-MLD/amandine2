@@ -7,7 +7,7 @@ const { about } = homeConfig;
 
 <section id="about" class="about-section" aria-labelledby="about-title">
   <div class="about-card">
-    <div class="about-visual">
+    <div class="about-visual" data-reveal="about">
       <div class="about-lights" aria-hidden="true">
         <span class="light light-top"></span>
         <span class="light light-left"></span>
@@ -30,10 +30,10 @@ const { about } = homeConfig;
       </div>
     </div>
 
-    <div class="about-copy min-w-0">
+    <div class="about-copy min-w-0" data-reveal="about">
       <h2 id="about-title" class="font-normal">{about.title}</h2>
       <p class="mt-6 text-lg leading-snug text-[var(--color-text-secondary)] md:text-xl xl:text-2xl">{about.subtitle}</p>
-      <p class="about-description mt-4 max-w-[30rem] leading-relaxed text-[var(--color-text-secondary)]">
+      <p class="about-description mt-4 max-w-[var(--text-width-standard)] leading-relaxed text-[var(--color-text-secondary)]">
         {about.description.map((part) => "emphasis" in part && part.emphasis
           ? <span class="about-description-emphasis">{part.text}</span>
           : part.text)}
@@ -45,20 +45,19 @@ const { about } = homeConfig;
 <style>
   .about-section {
     margin-inline: var(--section-inline-margin);
-    /* Même respiration entre les sections, à l'intérieur du cadre blanc continu. */
-    padding-bottom: var(--section-gap);
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
     background: var(--color-surface);
   }
 
   .about-card {
+    --about-inline-padding: max(0.5rem, calc(var(--content-axis) - var(--section-inline-margin)));
     display: grid;
     width: 100%;
-    max-width: 72rem;
+    max-width: calc(72rem + (2 * var(--about-inline-padding)));
     gap: 2rem;
     overflow: hidden;
     margin-inline: auto;
-    padding: 1.25rem var(--section-inline-padding) 2.5rem;
+    padding: 1.25rem var(--about-inline-padding) calc(var(--section-gap) / 2);
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
     background: var(--color-surface);
   }
@@ -119,7 +118,7 @@ const { about } = homeConfig;
     font-size: clamp(1.5rem, 10.8cqi, 3rem);
     white-space: nowrap;
     line-height: 1.02;
-    letter-spacing: -0.045em;
+    letter-spacing: var(--tracking-heading);
   }
 
   @media (min-width: 48rem) {
@@ -127,7 +126,7 @@ const { about } = homeConfig;
     .about-card {
       grid-template-columns: minmax(16rem, 26rem) minmax(0, 1fr);
       gap: clamp(2rem, 5vw, 5rem);
-      padding-block: clamp(3rem, 5vw, 5rem);
+      padding-top: clamp(3rem, 5vw, 5rem);
     }
     .about-visual {
       height: clamp(25rem, 40vw, 34rem);

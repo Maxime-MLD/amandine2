@@ -49,16 +49,15 @@ export interface SeoConfig {
 }
 
 export const seoConfig = {
-  defaultTitle: siteConfig.name,
+  defaultTitle: "Amandine Gauthier | Infirmière à domicile à Montagny",
   titleTemplate: `%s | ${siteConfig.name}`,
   defaultDescription: businessConfig.shortDescription,
-  // TODO_SEO_KEYWORDS: renseigner uniquement si elles apportent une valeur réelle.
+  // La balise keywords est volontairement omise : elle n’apporte aucune valeur SEO utile ici.
   keywords: [],
   primaryActivity: businessConfig.activity,
   primaryCity: businessConfig.address.city,
-  geographicArea: businessConfig.serviceArea.primaryArea,
-  // TODO_SCHEMA_ORG_TYPE: choisir le sous-type Schema.org le plus précis pour le client.
-  schemaOrgType: "LocalBusiness",
+  geographicArea: `${businessConfig.serviceArea.primaryArea} et environ ${businessConfig.serviceArea.radius.value} km alentours`,
+  schemaOrgType: "MedicalBusiness",
   robots: {
     index: true,
     follow: true,

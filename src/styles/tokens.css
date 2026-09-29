@@ -3,7 +3,8 @@
 
   /* Colors */
   --color-page: #f9f9f9;
-  --color-frame: var(--color-page);
+  --color-bg: var(--color-page);
+  --color-frame: var(--color-bg);
   --color-surface: #ffffff;
   --color-text: #161b21;
   --color-text-secondary: #73777c;
@@ -87,10 +88,14 @@
   --radius-lg: 2rem;
   --radius-xl: 2.5rem;
   --radius-pill: 9999px;
+  --radius-card: var(--radius-lg);
+  --radius-large: var(--radius-xl);
 
   /* Layout */
   --container: 128rem;
   --page-padding: clamp(1rem, 2vw, 2rem);
+  --container-max: var(--container);
+  --container-padding: var(--page-padding);
   --frame-space: clamp(1rem, 1.5vw, 1.5rem);
   --section-inline-margin: 0rem;
   --section-inline-padding: clamp(1.25rem, 3vw, 3rem);
@@ -98,22 +103,31 @@
   --content-copy-column: 25rem;
   --content-main-column: 48rem;
   --content-column-gap: clamp(2rem, 4vw, 4rem);
+  --text-width-short: 25rem;
+  --text-width-standard: 30rem;
+  --text-width-editorial: 72rem;
   --navbar-height: 5.25rem;
   --section-space: clamp(6rem, 10vw, 11.25rem);
+  --section-space-mobile: clamp(4rem, 10vw, 6rem);
   --section-gap: clamp(4rem, 8vw, 8rem);
+  --space-title-copy: 1.25rem;
 
   /* Typography */
   --font-primary: "DM Sans", Arial, sans-serif;
   --font-size-hero: clamp(3.25rem, 6vw, 6rem);
   --font-size-editorial: clamp(2.5rem, 4.2vw, 3.875rem);
-  --font-size-section: clamp(2.625rem, 5vw, 4.75rem);
+  --font-size-section: clamp(2.25rem, 4.2vw, 3.875rem);
   --font-size-h3: clamp(1.5rem, 1.2rem + 1vw, 2.25rem);
   --font-size-card-title: clamp(2rem, 2.1vw, 2.125rem);
   --font-size-lead: clamp(1.125rem, 1.5vw, 1.375rem);
   --font-size-body: clamp(1rem, 0.975rem + 0.125vw, 1.0625rem);
   --font-size-small: clamp(0.8125rem, 0.7875rem + 0.125vw, 0.875rem);
+  --font-size-section-copy: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+  --font-size-label: 0.625rem;
   --line-height-body: 1.6;
-  --tracking-heading: -0.04em;
+  --line-height-heading: 1.05;
+  --tracking-body: 0.006em;
+  --tracking-heading: -0.025em;
 
   /* Motion */
   --duration-fast: 150ms;
@@ -127,11 +141,10 @@
   --color-accent: var(--color-dark-hover);
   --color-on-primary: var(--color-surface);
   --color-on-secondary: var(--color-surface);
-  --color-background: var(--color-page);
-  --color-text-muted: var(--color-text-secondary);
+  --color-background: var(--color-bg);
+  --color-text-muted: var(--color-text-light);
   --color-border-strong: rgb(20 25 30 / 0.2);
   --color-overlay: rgb(19 27 36 / 0.42);
-  --container-max: var(--container);
   --page-padding-desktop: var(--page-padding);
   --page-padding-tablet: var(--page-padding);
   --page-padding-mobile: var(--page-padding);
@@ -144,7 +157,6 @@
   --font-size-h1: var(--font-size-hero);
   --font-size-h2: var(--font-size-section);
   --font-size-body-lg: var(--font-size-lead);
-  --line-height-heading: 1;
 }
 
 @media (min-width: 64rem) {
@@ -159,5 +171,6 @@
     --radius-md: 1.25rem;
     --radius-lg: 1.625rem;
     --radius-xl: 2rem;
+    --section-space: var(--section-space-mobile);
   }
 }

@@ -25,7 +25,7 @@ export const featuresConfig = {
   practicalInfo: false,
   animations: true,
   heavyAnimations: false,
-  smoothScroll: true,
+  smoothScroll: false,
   externalSmoothScroll: false,
   analytics: false,
   cookieBanner: false,

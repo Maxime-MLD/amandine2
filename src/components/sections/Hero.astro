@@ -1,5 +1,6 @@
 ---
 import { homeConfig } from "../../config/home.config";
+import { featuresConfig } from "../../config/features.config";
 import { navigationConfig } from "../../config/navigation.config";
 import ResponsiveImage from "../ui/ResponsiveImage.astro";
 
@@ -7,7 +8,12 @@ const { hero } = homeConfig;
 const { appointment } = navigationConfig;
 ---
 
-<section id="hero" class="hero" aria-labelledby="hero-title">
+<section
+  id="hero"
+  class="hero"
+  aria-labelledby="hero-title"
+  data-hero-motion-enabled={featuresConfig.animations ? "" : undefined}
+>
   <div class="hero-orbs" aria-hidden="true">
     <span class="orb orb-top"></span>
     <span class="orb orb-right"></span>
@@ -24,7 +30,14 @@ const { appointment } = navigationConfig;
     </p>
 
     <h1 id="hero-title" class="hero-heading mt-7 font-normal sm:mt-9">
-      {hero.titleLines.map((line) => <span class="block">{line}</span>)}
+      {hero.titleLines.map((line, index) => (
+        <Fragment>
+          <span class="hero-line-mask block overflow-hidden">
+            <span class="hero-line block">{line}</span>
+          </span>
+          {index < hero.titleLines.length - 1 ? " " : ""}
+        </Fragment>
+      ))}
     </h1>
 
     <p class="hero-description mt-6 max-w-[25rem] text-sm leading-[1.6] text-[var(--color-text-secondary)] sm:mt-7 sm:text-[0.9375rem]">
@@ -62,6 +75,24 @@ const { appointment } = navigationConfig;
   </div>
 </section>
 
+<script is:inline>
+  (() => {
+    const hero = document.getElementById("hero");
+    if (
+      !hero ||
+      !hero.hasAttribute("data-hero-motion-enabled") ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) return;
+
+    hero.setAttribute("data-hero-pending", "");
+    window.setTimeout(() => {
+      if (!hero.hasAttribute("data-hero-pending")) return;
+      hero.removeAttribute("data-hero-pending");
+      hero.setAttribute("data-hero-fallback", "");
+    }, 1600);
+  })();
+</script>
+
 <style>
   /* La composition et les cercles restent scoped ; toutes les couleurs sont des tokens. */
   .hero {
@@ -84,9 +115,32 @@ const { appointment } = navigationConfig;
   .hero-heading {
     font-size: clamp(2rem, 6vw, 4.5rem);
     line-height: 1.06;
-    letter-spacing: -0.047em;
+    letter-spacing: var(--tracking-heading);
     text-wrap: initial;
   }
+
+  .hero-line-mask {
+    display: block;
+    overflow: hidden;
+  }
+
+  .hero-line { display: block; }
+
+  .hero[data-hero-pending] .hero-badge,
+  .hero[data-hero-pending] .hero-description,
+  .hero[data-hero-pending] .hero-copy .btn-primary,
+  .hero[data-hero-pending] .hero-copy > p:last-child,
+  .hero[data-hero-pending] .hero-portrait {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .hero[data-hero-pending] .hero-badge { transform: translateY(8px); }
+  .hero[data-hero-pending] .hero-line { transform: translateY(110%); }
+  .hero[data-hero-pending] .hero-description,
+  .hero[data-hero-pending] .hero-copy .btn-primary,
+  .hero[data-hero-pending] .hero-copy > p:last-child { transform: translateY(12px); }
+  .hero[data-hero-pending] .hero-portrait { transform: translateY(15px) scale(0.985); }
 
   .hero-portrait {
     position: relative;
@@ -136,6 +190,22 @@ const { appointment } = navigationConfig;
     bottom: -23rem;
   }
 
+  @media (max-width: 63.999rem) {
+    .hero {
+      display: flex;
+      height: 100vh;
+      height: 100svh;
+      flex-direction: column;
+    }
+
+    .hero-portrait {
+      min-height: 0;
+      flex: 1 1 auto;
+      margin-top: clamp(1.25rem, 4vh, 2.5rem);
+      height: auto;
+    }
+  }
+
   @media (min-width: 64rem) {
     .hero {
       display: flex;
@@ -179,6 +249,27 @@ const { appointment } = navigationConfig;
       width: 45rem;
       right: -7rem;
       bottom: -32rem;
+    }
+  }
+
+  @media (max-width: 47.999rem) {
+    .hero[data-hero-pending] .hero-line { transform: translateY(105%); }
+    .hero[data-hero-pending] .hero-description,
+    .hero[data-hero-pending] .hero-copy .btn-primary,
+    .hero[data-hero-pending] .hero-copy > p:last-child { transform: translateY(8px); }
+    .hero[data-hero-pending] .hero-portrait { transform: translateY(10px) scale(0.985); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-line,
+    .hero-badge,
+    .hero-description,
+    .hero-copy .btn-primary,
+    .hero-copy > p:last-child,
+    .hero-portrait {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
     }
   }
 </style>

@@ -11,8 +11,8 @@ export interface Props {
 }
 
 const {
-  title = "TODO_TESTIMONIALS_SECTION_TITLE",
-  description = "TODO_TESTIMONIALS_SECTION_DESCRIPTION",
+  title = "Témoignages",
+  description = "",
 } = Astro.props as Props;
 
 const testimonialItems: readonly TestimonialItem[] = testimonials;
@@ -28,7 +28,6 @@ const publishedTestimonials = testimonialItems.filter(
   aria-labelledby="testimonials-title"
 >
   <Container>
-    <!-- TODO_TESTIMONIALS_SECTION: ne publier que des témoignages réels et autorisés. -->
     <SectionHeader title={title} description={description} headingId="testimonials-title" />
 
     {

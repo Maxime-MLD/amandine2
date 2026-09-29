@@ -1,10 +1,10 @@
 import { businessConfig } from "./business.config";
 
-const TODO_CANONICAL_URL = "https://todo-domain.example";
-const TODO_THEME_COLOR = "#171717";
-const TODO_MANIFEST_BACKGROUND_COLOR = "#fafafa";
-const TODO_SITE_LANGUAGE = "fr";
-const TODO_SITE_LOCALE = "fr_FR";
+const CANONICAL_URL = "https://www.amandine-gauthier.fr";
+const THEME_COLOR = "#171717";
+const MANIFEST_BACKGROUND_COLOR = "#fafafa";
+const SITE_LANGUAGE = "fr";
+const SITE_LOCALE = "fr_FR";
 
 export interface SiteConfig {
   canonicalUrl: string;
@@ -22,6 +22,8 @@ export interface SiteConfig {
   socialImages: {
     openGraph: string;
     openGraphAlt: string;
+    width: number;
+    height: number;
     twitter: string;
     twitterAlt: string;
   };
@@ -45,23 +47,25 @@ export interface SiteConfig {
 }
 
 export const siteConfig = {
-  canonicalUrl: TODO_CANONICAL_URL,
+  canonicalUrl: CANONICAL_URL,
   name: businessConfig.tradeName,
-  language: TODO_SITE_LANGUAGE,
-  locale: TODO_SITE_LOCALE,
-  themeColor: TODO_THEME_COLOR,
+  language: SITE_LANGUAGE,
+  locale: SITE_LOCALE,
+  themeColor: THEME_COLOR,
   author: businessConfig.legalName,
-  logo: "TODO_CLIENT_LOGO_URL",
+  logo: "/icons/ag-logo.svg",
   icons: {
-    favicon: "/icons/TODO_REPLACE_CLIENT_FAVICON.svg",
-    faviconPng: "/icons/TODO_REPLACE_CLIENT_FAVICON_32.png",
-    appleTouchIcon: "/icons/TODO_REPLACE_CLIENT_APPLE_TOUCH_ICON.png",
+    favicon: "/icons/ag-logo.svg",
+    faviconPng: "/icons/ag-logo-32.png",
+    appleTouchIcon: "/icons/ag-logo-180.png",
   },
   socialImages: {
-    openGraph: "/social/TODO_REPLACE_CLIENT_OG.png",
-    openGraphAlt: "TODO_OPEN_GRAPH_IMAGE_ALT",
-    twitter: "/social/TODO_REPLACE_CLIENT_TWITTER.png",
-    twitterAlt: "TODO_TWITTER_IMAGE_ALT",
+    openGraph: "/social/og.webp",
+    openGraphAlt: "Amandine Gauthier, infirmière à domicile à Montagny.",
+    width: 2400,
+    height: 1260,
+    twitter: "/social/og.webp",
+    twitterAlt: "Amandine Gauthier, infirmière à domicile à Montagny.",
   },
   manifest: {
     path: "/manifest.webmanifest",
@@ -71,17 +75,17 @@ export const siteConfig = {
     startUrl: "/",
     scope: "/",
     display: "standalone",
-    backgroundColor: TODO_MANIFEST_BACKGROUND_COLOR,
-    themeColor: TODO_THEME_COLOR,
+    backgroundColor: MANIFEST_BACKGROUND_COLOR,
+    themeColor: THEME_COLOR,
     icons: [
       {
-        src: "/icons/TODO_REPLACE_CLIENT_ICON_192.png",
+        src: "/icons/ag-logo-192.png",
         sizes: "192x192",
         type: "image/png",
         purpose: "any",
       },
       {
-        src: "/icons/TODO_REPLACE_CLIENT_ICON_512.png",
+        src: "/icons/ag-logo-512.png",
         sizes: "512x512",
         type: "image/png",
         purpose: "any",

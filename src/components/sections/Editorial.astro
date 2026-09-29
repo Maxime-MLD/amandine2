@@ -81,14 +81,14 @@ const { message, lines, images } = homeConfig.editorial;
   }
   .editorial-message {
     width: calc(100% - (var(--content-axis) * 2));
-    max-width: 72rem;
+    max-width: var(--text-width-editorial);
     margin-inline: var(--content-axis) auto;
     color: var(--color-text);
     font-family: var(--font-primary);
     font-size: var(--font-size-editorial);
     font-weight: 400;
     line-height: 1.06;
-    letter-spacing: -0.045em;
+    letter-spacing: var(--tracking-heading);
     text-wrap: balance;
   }
   .editorial-lines, .editorial-line { display: block; }

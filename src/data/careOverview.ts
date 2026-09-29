@@ -1,7 +1,7 @@
-import tension from "../assets/images/editorial/patient-tension.png";
-import senior from "../assets/images/editorial/patient-senior.png";
-import homme from "../assets/images/editorial/patient-homme.png";
-import accompagnement from "../assets/images/editorial/patient-accompagnement.png";
+import ecoute from "../assets/images/patients/a-votre-ecoute.webp";
+import cotes from "../assets/images/patients/a-vos-cotes.webp";
+import tousLesAges from "../assets/images/patients/pour-tous-les-ages.webp";
+import attention from "../assets/images/patients/avec-attention.webp";
 import { businessConfig } from "../config/business.config";
 import { createTelHref } from "../utils/links";
 
@@ -31,24 +31,30 @@ export const careOverview = {
   },
   contact: {
     title: "Parlons de vos besoins.",
-    text: "Votre soin n’est pas présenté ici ? Contactez-moi pour en discuter.",
+    text: "Tous les soins ne sont pas présentés sur le site. Si votre besoin n’apparaît pas ici, contactez-moi afin que nous puissions voir ensemble si je peux assurer votre prise en charge.",
     label: "Me contacter",
     href: createTelHref(businessConfig.contact.phoneNormalized) ?? "/contact",
     ariaLabel: `Appeler Amandine Gauthier au ${businessConfig.contact.phoneDisplay}`,
   },
   photos: {
     label: "L’accompagnement en images",
-    illustration: "Photos d’illustration",
     items: [
-      { src: tension, title: "À votre écoute", alt: "Portrait d’illustration d’une patiente souriante, avec un brassard de tension au bras." },
-      { src: senior, title: "À chaque âge", alt: "Portrait d’illustration d’une femme âgée souriante, sur un fond doux et flou." },
-      { src: homme, title: "En confiance", alt: "Portrait d’illustration d’un homme souriant, photographié en plan serré." },
-      { src: accompagnement, title: "À vos côtés", alt: "Portrait d’illustration d’un homme âgé au sourire chaleureux." },
+      { src: ecoute, title: "À votre écoute", alt: "Portrait éditorial d’une femme d’environ 50 ans souriant doucement sur un fond lavande." },
+      { src: cotes, title: "À vos côtés", alt: "Portrait éditorial d’un homme d’environ 65 ans souriant doucement sur un fond bleu pastel." },
+      { src: tousLesAges, title: "Pour tous les âges", alt: "Portrait éditorial d’une femme d’environ 30 ans souriant doucement sur un fond pêche." },
+      { src: attention, title: "Avec attention", alt: "Portrait éditorial d’un couple d’environ 50 ans souriant doucement sur un fond rose poudré." },
     ],
   },
   carousel: {
     care: { previous: "Soin précédent", next: "Soin suivant", goTo: "Afficher le soin", position: "Soin", roleDescription: "carrousel manuel" },
-    photos: { previous: "Photo précédente", next: "Photo suivante", goTo: "Afficher la photo", position: "Photo", roleDescription: "carrousel manuel" },
+    photos: {
+      previous: "Photo précédente",
+      next: "Photo suivante",
+      goTo: "Afficher la photo",
+      position: "Photo",
+      roleDescription: "carrousel d’images",
+      autoplayInterval: 3000,
+    },
   },
 } as const;
 

@@ -62,8 +62,8 @@ const keywords = configuredKeywords.filter(isUsableSeoValue);
 <meta property="og:site_name" content={seoConfig.openGraph.siteName} />
 <meta property="og:locale" content={seoConfig.openGraph.locale} />
 <meta property="og:image" content={resolved.image} />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
+<meta property="og:image:width" content={String(siteConfig.socialImages.width)} />
+<meta property="og:image:height" content={String(siteConfig.socialImages.height)} />
 <meta property="og:image:alt" content={resolved.openGraphImageAlt} />
 
 <meta name="twitter:card" content={seoConfig.twitter.card} />
