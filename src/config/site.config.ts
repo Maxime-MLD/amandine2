@@ -55,9 +55,9 @@ export const siteConfig = {
   author: businessConfig.legalName,
   logo: "/icons/ag-logo.svg",
   icons: {
-    favicon: "/icons/ag-logo.svg",
-    faviconPng: "/icons/ag-logo-32.png",
-    appleTouchIcon: "/icons/ag-logo-180.png",
+    favicon: "/icons/ag-logo.svg?v=round-1",
+    faviconPng: "/icons/ag-logo-32.png?v=round-1",
+    appleTouchIcon: "/icons/ag-logo-180.png?v=round-1",
   },
   socialImages: {
     openGraph: "/social/og.webp",
@@ -79,13 +79,13 @@ export const siteConfig = {
     themeColor: THEME_COLOR,
     icons: [
       {
-        src: "/icons/ag-logo-192.png",
+        src: "/icons/ag-logo-192.png?v=round-1",
         sizes: "192x192",
         type: "image/png",
         purpose: "any",
       },
       {
-        src: "/icons/ag-logo-512.png",
+        src: "/icons/ag-logo-512.png?v=round-1",
         sizes: "512x512",
         type: "image/png",
         purpose: "any",

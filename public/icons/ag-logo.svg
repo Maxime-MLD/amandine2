@@ -8,7 +8,7 @@
       <stop offset="100%" stop-color="#F4D6D2"/>
     </linearGradient>
   </defs>
-  <rect width="1024" height="1024" fill="url(#heroGradient)"/>
+  <circle cx="512" cy="512" r="512" fill="url(#heroGradient)"/>
   <text
     x="512"
     y="542"
