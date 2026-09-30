@@ -98,6 +98,15 @@ export interface BusinessConfig {
     siret: string;
     vatNumber: string;
   };
+  professionalDetails: {
+    activity: string;
+    title: string;
+    titleIssuingCountry: string;
+    professionalOrder: string;
+    rpps: string;
+    apeCode: string;
+    apeLabel: string;
+  };
   publicationDirector: string;
   insurance: InsuranceInformation;
   hostingProvider: HostingProvider;

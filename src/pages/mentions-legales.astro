@@ -2,31 +2,46 @@
 import { businessConfig } from "../config/business.config";
 import LegalLayout from "../layouts/LegalLayout.astro";
 
-const phoneWithDots = businessConfig.contact.phoneDisplay.replaceAll(" ", ".");
+const formattedSiret = businessConfig.legalIdentifiers.siret.replace(
+  /^(\d{3})(\d{3})(\d{3})(\d{5})$/,
+  "$1 $2 $3 $4",
+);
 ---
 
 <LegalLayout
   title="Mentions légales"
   description="Les informations relatives à l’édition, l’hébergement et l’utilisation de ce site."
 >
-  <p class="text-[var(--color-text-muted)]">Dernière mise à jour : 2 septembre 2026</p>
+  <p class="text-[var(--color-text-muted)]">Dernière mise à jour : 30 septembre 2026</p>
 
   <section aria-labelledby="publisher-title">
     <h2 id="publisher-title">Édition du site</h2>
     <p class="mt-4">
-      Ce site est édité par <strong>{businessConfig.legalName}</strong>, infirmière à domicile,
-      exerçant à {businessConfig.address.formatted}, France.
+      Ce site est édité par <strong>{businessConfig.legalName}</strong>, infirmière libérale diplômée
+      d’État, exerçant au {businessConfig.address.formatted}, France.
     </p>
     <ul class="mt-4 list-disc space-y-2 pl-6">
-      <li>Téléphone : <strong>{phoneWithDots}</strong></li>
+      <li>Téléphone : <strong>{businessConfig.contact.phoneDisplay}</strong></li>
       <li>
         Email :{" "}
-        <a class="focus-ring font-semibold underline underline-offset-4" href={`mailto:${businessConfig.contact.email}`}>
-          {businessConfig.contact.email}
+        <a class="focus-ring underline underline-offset-4" href={`mailto:${businessConfig.contact.email}`}>
+          <strong>{businessConfig.contact.email}</strong>
         </a>
       </li>
-      <li>Titre professionnel : Infirmière libérale</li>
+      <li>SIRET : <strong>{formattedSiret}</strong></li>
+      <li>N° RPPS : <strong>{businessConfig.professionalDetails.rpps}</strong></li>
+      <li>Activité : <strong>{businessConfig.professionalDetails.activity}</strong></li>
+      <li>
+        Code APE : <strong>{businessConfig.professionalDetails.apeCode} – {businessConfig.professionalDetails.apeLabel}</strong>
+      </li>
+      <li>Titre professionnel : <strong>{businessConfig.professionalDetails.title}</strong></li>
+      <li>État de délivrance du titre : <strong>{businessConfig.professionalDetails.titleIssuingCountry}</strong></li>
+      <li>Ordre professionnel : <strong>{businessConfig.professionalDetails.professionalOrder}</strong></li>
     </ul>
+    <p class="mt-4">
+      L’activité professionnelle est soumise aux règles applicables à la profession infirmière et
+      au Code de déontologie des infirmiers prévu par le Code de la santé publique.
+    </p>
     <p class="mt-4">La directrice de la publication est {businessConfig.publicationDirector}.</p>
   </section>
 

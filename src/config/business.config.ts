@@ -51,6 +51,15 @@ export const businessConfig = {
     siret: "84234813800038",
     vatNumber: "FR38842348138",
   },
+  professionalDetails: {
+    activity: "Infirmière libérale",
+    title: "Infirmière diplômée d’État",
+    titleIssuingCountry: "France",
+    professionalOrder: "Ordre national des infirmiers",
+    rpps: "10105460058",
+    apeCode: "86.90D",
+    apeLabel: "Activités des infirmiers et des sages-femmes",
+  },
   publicationDirector: "Amandine Gauthier",
   insurance: {
     enabled: false,
