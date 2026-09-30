@@ -35,7 +35,7 @@ const resolvedBreadcrumbs =
           { name: title ?? "", url: pathname },
         ]
       : [];
-const structuredData = buildSeoGraph(resolved, pathname, resolvedBreadcrumbs);
+const structuredData = buildSeoGraph(resolved, resolvedBreadcrumbs);
 const configuredKeywords: readonly string[] = seoConfig.keywords;
 const keywords = configuredKeywords.filter(isUsableSeoValue);
 ---

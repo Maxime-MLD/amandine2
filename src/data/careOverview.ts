@@ -33,7 +33,7 @@ export const careOverview = {
     title: "Parlons de vos besoins.",
     text: "Tous les soins ne sont pas présentés sur le site. Si votre besoin n’apparaît pas ici, contactez-moi afin que nous puissions voir ensemble si je peux assurer votre prise en charge.",
     label: "Me contacter",
-    href: createTelHref(businessConfig.contact.phoneNormalized) ?? "/contact",
+    href: createTelHref(businessConfig.contact.phoneNormalized) ?? "/#contact",
     ariaLabel: `Appeler Amandine Gauthier au ${businessConfig.contact.phoneDisplay}`,
   },
   photos: {

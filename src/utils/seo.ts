@@ -275,11 +275,10 @@ export function buildBusinessSchema(): JsonLdObject {
 
 export function buildWebPageSchema(
   resolvedSeo: ResolvedSeo,
-  pathname: string,
 ): JsonLdObject {
   const canonicalIsUsable = isUsableSeoValue(resolvedSeo.canonical);
   return cleanJsonLd({
-    "@type": pathname === "/contact" || pathname === "/contact/" ? "ContactPage" : "WebPage",
+    "@type": "WebPage",
     "@id": canonicalIsUsable ? `${resolvedSeo.canonical}#webpage` : undefined,
     url: resolvedSeo.canonical,
     name: resolvedSeo.title,
@@ -322,13 +321,12 @@ export function buildBreadcrumbSchema(
 
 export function buildSeoGraph(
   resolvedSeo: ResolvedSeo,
-  pathname: string,
   breadcrumbs: readonly BreadcrumbItem[] = [],
 ): JsonLdObject {
   const graph: JsonLdObject[] = [
     buildWebSiteSchema(),
     buildBusinessSchema(),
-    buildWebPageSchema(resolvedSeo, pathname),
+    buildWebPageSchema(resolvedSeo),
   ];
   const breadcrumbSchema = buildBreadcrumbSchema(breadcrumbs);
   if (breadcrumbSchema) graph.push(breadcrumbSchema);
