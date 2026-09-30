@@ -41,7 +41,7 @@ import CareJourneyCard from "../cards/CareJourneyCard.astro";
     </div>
 
     <div class="journey-action text-center" data-journey-action data-motion>
-      <a href={careJourney.contact.href} aria-label={careJourney.contact.ariaLabel} class="btn-primary focus-ring">
+      <a href={careJourney.contact.href} aria-label={`${careJourney.contact.label}. ${careJourney.contact.ariaLabel}`} class="btn-primary focus-ring">
         {careJourney.contact.label}
         <span aria-hidden="true">↗</span>
       </a>

@@ -51,7 +51,7 @@ export const animationConfig = {
   parallaxAmount: 12,
   scrub: 0.6,
   editorial: {
-    mutedOpacity: 0.26,
+    mutedOpacity: 0.47,
     wordDuration: 1,
     wordStagger: 0.85,
   },

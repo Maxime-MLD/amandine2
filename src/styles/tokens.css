@@ -7,7 +7,8 @@
   --color-frame: var(--color-bg);
   --color-surface: #ffffff;
   --color-text: #161b21;
-  --color-text-secondary: #73777c;
+  --color-text-secondary: #6f7378;
+  --color-text-footer: var(--color-text-secondary);
   --color-text-light: #b9b9b9;
   --color-dark: #131b24;
   --color-dark-hover: #202a35;
@@ -142,7 +143,7 @@
   --color-on-primary: var(--color-surface);
   --color-on-secondary: var(--color-surface);
   --color-background: var(--color-bg);
-  --color-text-muted: var(--color-text-light);
+  --color-text-muted: var(--color-text-secondary);
   --color-border-strong: rgb(20 25 30 / 0.2);
   --color-overlay: rgb(19 27 36 / 0.42);
   --page-padding-desktop: var(--page-padding);
