@@ -2,6 +2,7 @@
 import { businessConfig } from "../../config/business.config";
 import { navigationConfig } from "../../config/navigation.config";
 import { isNavigationItemActive } from "../../utils/navigation";
+import ArrowIcon from "../ui/ArrowIcon.astro";
 
 export interface Props {
   dialogId?: string;
@@ -109,7 +110,7 @@ const navigationItems = navigationConfig.items;
             data-mobile-menu-link
           >
             <span>{navigationConfig.appointment.label}</span>
-            <span aria-hidden="true">{navigationConfig.mobileMenu.ctaArrow}</span>
+            <span aria-hidden="true"><ArrowIcon /></span>
           </a>
           <p class="mobile-meta">{navigationConfig.mobileMenu.meta}</p>
         </div>

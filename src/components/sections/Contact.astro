@@ -1,6 +1,7 @@
 ---
 import { contactConfig } from "../../config/contact.config";
 import ContactForm from "../forms/ContactForm.astro";
+import ArrowIcon from "../ui/ArrowIcon.astro";
 ---
 
 <section id="contact" class="contact-section" aria-labelledby="contact-title">
@@ -17,7 +18,10 @@ import ContactForm from "../forms/ContactForm.astro";
         <p class="contact-label">{contactConfig.addressLabel}</p>
         <p class="contact-address">{contactConfig.street}<br />{contactConfig.city}</p>
         <p class="text-sm leading-relaxed text-[var(--color-text-secondary)]">{contactConfig.appointmentNote}</p>
-        <a class="focus-ring text-sm underline underline-offset-4" href={contactConfig.directionsHref} target="_blank" rel="noopener noreferrer">{contactConfig.directionsLabel}</a>
+        <a class="contact-directions focus-ring text-sm underline underline-offset-4" href={contactConfig.directionsHref} target="_blank" rel="noopener noreferrer">
+          <span>{contactConfig.directionsLabel}</span>
+          <ArrowIcon direction="up-right" />
+        </a>
       </div>
     </address>
   </div>
@@ -48,6 +52,7 @@ import ContactForm from "../forms/ContactForm.astro";
   .contact-address { font-size: clamp(1rem, 1.1vw, 1.125rem); line-height: 1.6; }
   .contact-phone { font-size: clamp(1.125rem, 1.4vw, 1.375rem); letter-spacing: -0.025em; text-decoration: none; line-height: 1.6; }
   .contact-phone:hover { text-decoration: underline; }
+  .contact-directions { display: inline-flex; align-items: center; gap: 0.35rem; }
   .contact-form-panel {
     width: 100%;
     max-width: 48rem;

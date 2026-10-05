@@ -1,0 +1,34 @@
+---
+export interface Props {
+  direction?: "right" | "up-right";
+  class?: string;
+}
+
+const { direction = "right", class: className } = Astro.props as Props;
+const path = direction === "up-right"
+  ? "M7 17 17 7M8 7h9v9"
+  : "M5 12h14m-5-5 5 5-5 5";
+---
+
+<svg
+  class:list={["arrow-icon", className]}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.75"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path d={path}></path>
+</svg>
+
+<style>
+  .arrow-icon {
+    width: 1em;
+    height: 1em;
+    flex: none;
+    overflow: visible;
+  }
+</style>

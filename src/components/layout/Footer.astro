@@ -2,6 +2,7 @@
 import { businessConfig } from "../../config/business.config";
 import { contactConfig } from "../../config/contact.config";
 import { navigationConfig } from "../../config/navigation.config";
+import ArrowIcon from "../ui/ArrowIcon.astro";
 
 interface Props { class?: string }
 const { class: className } = Astro.props;
@@ -23,7 +24,10 @@ const currentYear = new Date().getFullYear();
         <address class="footer-links not-italic">
           <span>{contactConfig.street}<br />{contactConfig.city}</span>
           <span>{contactConfig.appointmentNote}</span>
-          <a class="focus-ring" href={contactConfig.directionsHref} target="_blank" rel="noopener noreferrer">{contactConfig.directionsLabel}</a>
+          <a class="focus-ring footer-arrow-link" href={contactConfig.directionsHref} target="_blank" rel="noopener noreferrer">
+            <span>{contactConfig.directionsLabel}</span>
+            <ArrowIcon direction="up-right" />
+          </a>
         </address>
       </div>
       <nav aria-label={navigationConfig.labels.legalNavigation}>
@@ -39,7 +43,10 @@ const currentYear = new Date().getFullYear();
         <h2>{footer.contactTitle}</h2>
         <div class="footer-links">
           <a class="focus-ring" href={contactConfig.phoneHref}>{contactConfig.phone}</a>
-          <a class="focus-ring" href={contactConfig.banner.href}>{footer.contactLabel}</a>
+          <a class="focus-ring footer-arrow-link" href={contactConfig.banner.href}>
+            <span>{footer.contactLabel}</span>
+            <ArrowIcon direction="up-right" />
+          </a>
         </div>
       </div>
       <p class="footer-signature">
@@ -89,6 +96,7 @@ const currentYear = new Date().getFullYear();
   .footer-links { display: flex; flex-direction: column; gap: 0.875rem; list-style: none; padding: 0; margin-top: 1.5rem; font-size: 0.8125rem; line-height: 1.6; color: var(--color-text-footer); }
   a { text-decoration: none; }
   a:hover { text-decoration: underline; }
+  .footer-arrow-link { display: inline-flex; width: fit-content; align-items: center; gap: 0.35rem; }
   .footer-brand { display: flex; min-width: 0; flex-direction: column; }
   .footer-signature {
     width: 100%;

@@ -16,7 +16,6 @@ export interface NavigationConfig {
   mobileMenu: {
     eyebrow: string;
     meta: string;
-    ctaArrow: string;
   };
   labels: {
     primaryNavigation: string;
@@ -69,7 +68,6 @@ export const navigationConfig = {
   mobileMenu: {
     eyebrow: "Menu",
     meta: `${businessConfig.serviceArea.primaryArea} · Soins à domicile & au cabinet`,
-    ctaArrow: "→",
   },
   legalItems: [
     {
